@@ -1,0 +1,743 @@
+{
+  "date": "2026-10-13",
+  "runtime": "macOS arm64 / Electron 43.1.0 / Tauri WKWebView",
+  "sourceRoot": "/tmp/mqtt-desktop-soak-sUi5co",
+  "loadCycles": 3,
+  "targetSecondsPerCycle": 120,
+  "targetMessagesPerSecond": 500,
+  "elapsedMs": 773379,
+  "sentPerRuntime": 178200,
+  "passed": true,
+  "databaseSequences": {
+    "electron": {
+      "rows": 178200,
+      "distinctSequences": 178200,
+      "minSequence": 1,
+      "maxSequence": 178200,
+      "invalidSequences": 0,
+      "quickCheck": "ok"
+    },
+    "tauri": {
+      "rows": 178200,
+      "distinctSequences": 178200,
+      "minSequence": 1,
+      "maxSequence": 178200,
+      "invalidSequences": 0,
+      "quickCheck": "ok"
+    }
+  },
+  "allocations": [
+    {
+      "stage": "baseline",
+      "sent": 0,
+      "domRows": 0,
+      "domNodes": 206,
+      "tauriRssMiB": 144.0,
+      "webkitRssMiB": 133.3,
+      "webContentRssMiB": 69.3,
+      "heapAllocations": 136335,
+      "heapMiB": 27.07,
+      "physicalFootprint": "207.6M",
+      "WebCore::Text": {
+        "count": 240,
+        "bytes": 26880
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 148,
+        "bytes": 21312
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 54,
+        "bytes": 7776
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 16,
+        "bytes": 17152
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 10,
+        "bytes": 10720
+      }
+    },
+    {
+      "stage": "cycle1-loaded",
+      "sent": 58600,
+      "domRows": 3,
+      "domNodes": 246,
+      "tauriRssMiB": 147.3,
+      "webkitRssMiB": 304.9,
+      "webContentRssMiB": 227.8,
+      "heapAllocations": 511478,
+      "heapMiB": 112.81,
+      "physicalFootprint": "267.3M",
+      "WebCore::Text": {
+        "count": 379,
+        "bytes": 42448
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 248,
+        "bytes": 35712
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 80,
+        "bytes": 11520
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 53,
+        "bytes": 56816
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 20,
+        "bytes": 21440
+      }
+    },
+    {
+      "stage": "cycle1-idle",
+      "sent": 58600,
+      "domRows": 3,
+      "domNodes": 246,
+      "tauriRssMiB": 147.2,
+      "webkitRssMiB": 301.7,
+      "webContentRssMiB": 225.0,
+      "heapAllocations": 483696,
+      "heapMiB": 104.61,
+      "physicalFootprint": "135.1M",
+      "WebCore::Text": {
+        "count": 254,
+        "bytes": 28448
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 152,
+        "bytes": 21888
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 68,
+        "bytes": 9792
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 53,
+        "bytes": 56816
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 20,
+        "bytes": 21440
+      }
+    },
+    {
+      "stage": "cycle1-cleared",
+      "sent": 58600,
+      "domRows": 0,
+      "domNodes": 206,
+      "tauriRssMiB": 147.2,
+      "webkitRssMiB": 301.5,
+      "webContentRssMiB": 225.0,
+      "heapAllocations": 488540,
+      "heapMiB": 106.19,
+      "physicalFootprint": "138.0M",
+      "WebCore::Text": {
+        "count": 255,
+        "bytes": 28560
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 153,
+        "bytes": 22032
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 68,
+        "bytes": 9792
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 39,
+        "bytes": 41808
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 10,
+        "bytes": 10720
+      }
+    },
+    {
+      "stage": "cycle1-clear-idle",
+      "sent": 58600,
+      "domRows": 0,
+      "domNodes": 206,
+      "tauriRssMiB": 147.2,
+      "webkitRssMiB": 301.4,
+      "webContentRssMiB": 224.9,
+      "heapAllocations": 488780,
+      "heapMiB": 105.13,
+      "physicalFootprint": "125.6M",
+      "WebCore::Text": {
+        "count": 255,
+        "bytes": 28560
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 153,
+        "bytes": 22032
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 68,
+        "bytes": 9792
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 39,
+        "bytes": 41808
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 10,
+        "bytes": 10720
+      }
+    },
+    {
+      "stage": "cycle1-disconnected",
+      "sent": 58600,
+      "domRows": 0,
+      "domNodes": 206,
+      "tauriRssMiB": 147.2,
+      "webkitRssMiB": 301.6,
+      "webContentRssMiB": 225.1,
+      "heapAllocations": 482362,
+      "heapMiB": 104.42,
+      "physicalFootprint": "139.3M",
+      "WebCore::Text": {
+        "count": 257,
+        "bytes": 28784
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 153,
+        "bytes": 22032
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 69,
+        "bytes": 9936
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 39,
+        "bytes": 41808
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 10,
+        "bytes": 10720
+      }
+    },
+    {
+      "stage": "cycle1-disconnect-idle",
+      "sent": 58600,
+      "domRows": 0,
+      "domNodes": 206,
+      "tauriRssMiB": 147.2,
+      "webkitRssMiB": 301.4,
+      "webContentRssMiB": 225.0,
+      "heapAllocations": 482201,
+      "heapMiB": 104.31,
+      "physicalFootprint": "125.9M",
+      "WebCore::Text": {
+        "count": 257,
+        "bytes": 28784
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 153,
+        "bytes": 22032
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 69,
+        "bytes": 9936
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 39,
+        "bytes": 41808
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 10,
+        "bytes": 10720
+      }
+    },
+    {
+      "stage": "cycle2-connected",
+      "sent": 58600,
+      "domRows": 0,
+      "domNodes": 206,
+      "tauriRssMiB": 147.2,
+      "webkitRssMiB": 301.5,
+      "webContentRssMiB": 225.1,
+      "heapAllocations": 488254,
+      "heapMiB": 105.01,
+      "physicalFootprint": "145.5M",
+      "WebCore::Text": {
+        "count": 260,
+        "bytes": 29120
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 153,
+        "bytes": 22032
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 69,
+        "bytes": 9936
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 39,
+        "bytes": 41808
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 10,
+        "bytes": 10720
+      }
+    },
+    {
+      "stage": "cycle2-loaded",
+      "sent": 118400,
+      "domRows": 3,
+      "domNodes": 246,
+      "tauriRssMiB": 147.6,
+      "webkitRssMiB": 358.6,
+      "webContentRssMiB": 281.4,
+      "heapAllocations": 539432,
+      "heapMiB": 132.34,
+      "physicalFootprint": "156.7M",
+      "WebCore::Text": {
+        "count": 254,
+        "bytes": 28448
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 152,
+        "bytes": 21888
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 68,
+        "bytes": 9792
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 52,
+        "bytes": 55744
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 20,
+        "bytes": 21440
+      }
+    },
+    {
+      "stage": "cycle2-idle",
+      "sent": 118400,
+      "domRows": 3,
+      "domNodes": 246,
+      "tauriRssMiB": 147.6,
+      "webkitRssMiB": 351.0,
+      "webContentRssMiB": 274.0,
+      "heapAllocations": 530185,
+      "heapMiB": 128.75,
+      "physicalFootprint": "159.9M",
+      "WebCore::Text": {
+        "count": 254,
+        "bytes": 28448
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 152,
+        "bytes": 21888
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 68,
+        "bytes": 9792
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 52,
+        "bytes": 55744
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 20,
+        "bytes": 21440
+      }
+    },
+    {
+      "stage": "cycle2-cleared",
+      "sent": 118400,
+      "domRows": 0,
+      "domNodes": 206,
+      "tauriRssMiB": 147.6,
+      "webkitRssMiB": 350.9,
+      "webContentRssMiB": 274.1,
+      "heapAllocations": 529873,
+      "heapMiB": 128.6,
+      "physicalFootprint": "160.3M",
+      "WebCore::Text": {
+        "count": 255,
+        "bytes": 28560
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 153,
+        "bytes": 22032
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 68,
+        "bytes": 9792
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 38,
+        "bytes": 40736
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 10,
+        "bytes": 10720
+      }
+    },
+    {
+      "stage": "cycle2-clear-idle",
+      "sent": 118400,
+      "domRows": 0,
+      "domNodes": 206,
+      "tauriRssMiB": 147.6,
+      "webkitRssMiB": 350.7,
+      "webContentRssMiB": 273.9,
+      "heapAllocations": 529158,
+      "heapMiB": 128.61,
+      "physicalFootprint": "147.1M",
+      "WebCore::Text": {
+        "count": 255,
+        "bytes": 28560
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 153,
+        "bytes": 22032
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 68,
+        "bytes": 9792
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 38,
+        "bytes": 40736
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 10,
+        "bytes": 10720
+      }
+    },
+    {
+      "stage": "cycle2-disconnected",
+      "sent": 118400,
+      "domRows": 0,
+      "domNodes": 206,
+      "tauriRssMiB": 147.6,
+      "webkitRssMiB": 350.9,
+      "webContentRssMiB": 274.1,
+      "heapAllocations": 529637,
+      "heapMiB": 128.68,
+      "physicalFootprint": "160.8M",
+      "WebCore::Text": {
+        "count": 257,
+        "bytes": 28784
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 153,
+        "bytes": 22032
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 69,
+        "bytes": 9936
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 38,
+        "bytes": 40736
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 10,
+        "bytes": 10720
+      }
+    },
+    {
+      "stage": "cycle2-disconnect-idle",
+      "sent": 118400,
+      "domRows": 0,
+      "domNodes": 206,
+      "tauriRssMiB": 147.6,
+      "webkitRssMiB": 350.7,
+      "webContentRssMiB": 274.0,
+      "heapAllocations": 529861,
+      "heapMiB": 128.71,
+      "physicalFootprint": "147.4M",
+      "WebCore::Text": {
+        "count": 257,
+        "bytes": 28784
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 153,
+        "bytes": 22032
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 69,
+        "bytes": 9936
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 38,
+        "bytes": 40736
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 10,
+        "bytes": 10720
+      }
+    },
+    {
+      "stage": "cycle3-connected",
+      "sent": 118400,
+      "domRows": 0,
+      "domNodes": 206,
+      "tauriRssMiB": 147.6,
+      "webkitRssMiB": 350.9,
+      "webContentRssMiB": 274.1,
+      "heapAllocations": 530608,
+      "heapMiB": 128.89,
+      "physicalFootprint": "167.2M",
+      "WebCore::Text": {
+        "count": 260,
+        "bytes": 29120
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 153,
+        "bytes": 22032
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 69,
+        "bytes": 9936
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 38,
+        "bytes": 40736
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 10,
+        "bytes": 10720
+      }
+    },
+    {
+      "stage": "cycle3-loaded",
+      "sent": 178200,
+      "domRows": 3,
+      "domNodes": 246,
+      "tauriRssMiB": 172.1,
+      "webkitRssMiB": 371.9,
+      "webContentRssMiB": 291.9,
+      "heapAllocations": 534607,
+      "heapMiB": 126.73,
+      "physicalFootprint": "149.3M",
+      "WebCore::Text": {
+        "count": 870,
+        "bytes": 97440
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 237,
+        "bytes": 34128
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 259,
+        "bytes": 37296
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 51,
+        "bytes": 54672
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 20,
+        "bytes": 21440
+      }
+    },
+    {
+      "stage": "cycle3-idle",
+      "sent": 178200,
+      "domRows": 3,
+      "domNodes": 246,
+      "tauriRssMiB": 172.1,
+      "webkitRssMiB": 369.7,
+      "webContentRssMiB": 289.9,
+      "heapAllocations": 481608,
+      "heapMiB": 109.18,
+      "physicalFootprint": "148.8M",
+      "WebCore::Text": {
+        "count": 604,
+        "bytes": 67648
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 161,
+        "bytes": 23184
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 69,
+        "bytes": 9936
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 51,
+        "bytes": 54672
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 20,
+        "bytes": 21440
+      }
+    },
+    {
+      "stage": "cycle3-cleared",
+      "sent": 178200,
+      "domRows": 0,
+      "domNodes": 206,
+      "tauriRssMiB": 172.1,
+      "webkitRssMiB": 369.5,
+      "webContentRssMiB": 290.0,
+      "heapAllocations": 486857,
+      "heapMiB": 109.67,
+      "physicalFootprint": "149.1M",
+      "WebCore::Text": {
+        "count": 605,
+        "bytes": 67760
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 162,
+        "bytes": 23328
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 69,
+        "bytes": 9936
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 37,
+        "bytes": 39664
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 10,
+        "bytes": 10720
+      }
+    },
+    {
+      "stage": "cycle3-clear-idle",
+      "sent": 178200,
+      "domRows": 0,
+      "domNodes": 206,
+      "tauriRssMiB": 172.0,
+      "webkitRssMiB": 369.3,
+      "webContentRssMiB": 289.8,
+      "heapAllocations": 486125,
+      "heapMiB": 109.69,
+      "physicalFootprint": "135.8M",
+      "WebCore::Text": {
+        "count": 605,
+        "bytes": 67760
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 162,
+        "bytes": 23328
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 69,
+        "bytes": 9936
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 37,
+        "bytes": 39664
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 10,
+        "bytes": 10720
+      }
+    },
+    {
+      "stage": "cycle3-disconnected",
+      "sent": 178200,
+      "domRows": 0,
+      "domNodes": 206,
+      "tauriRssMiB": 172.1,
+      "webkitRssMiB": 369.4,
+      "webContentRssMiB": 289.9,
+      "heapAllocations": 487576,
+      "heapMiB": 109.94,
+      "physicalFootprint": "136.2M",
+      "WebCore::Text": {
+        "count": 609,
+        "bytes": 68208
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 162,
+        "bytes": 23328
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 70,
+        "bytes": 10080
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 37,
+        "bytes": 39664
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 10,
+        "bytes": 10720
+      }
+    },
+    {
+      "stage": "cycle3-disconnect-idle",
+      "sent": 178200,
+      "domRows": 0,
+      "domNodes": 206,
+      "tauriRssMiB": 172.0,
+      "webkitRssMiB": 369.3,
+      "webContentRssMiB": 289.9,
+      "heapAllocations": 478523,
+      "heapMiB": 108.24,
+      "physicalFootprint": "136.0M",
+      "WebCore::Text": {
+        "count": 585,
+        "bytes": 65520
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 155,
+        "bytes": 22320
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 54,
+        "bytes": 7776
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 37,
+        "bytes": 39664
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 10,
+        "bytes": 10720
+      }
+    },
+    {
+      "stage": "cleanup-connected",
+      "sent": 178200,
+      "domRows": 0,
+      "domNodes": 206,
+      "tauriRssMiB": 172.1,
+      "webkitRssMiB": 369.4,
+      "webContentRssMiB": 289.9,
+      "heapAllocations": 485786,
+      "heapMiB": 109.31,
+      "physicalFootprint": "136.3M",
+      "WebCore::Text": {
+        "count": 591,
+        "bytes": 66192
+      },
+      "WebCore::HTMLDivElement": {
+        "count": 155,
+        "bytes": 22320
+      },
+      "WebCore::HTMLSpanElement": {
+        "count": 54,
+        "bytes": 7776
+      },
+      "WebKit::PlatformCALayerRemote": {
+        "count": 37,
+        "bytes": 39664
+      },
+      "WebKit::GraphicsLayerCARemote": {
+        "count": 10,
+        "bytes": 10720
+      }
+    }
+  ],
+  "leaks": {
+    "reportedBlocks": 1,
+    "reportedBytes": 32,
+    "type": "NSMutableDictionary",
+    "exitCode": 1,
+    "allocationBacktraceAvailable": false
+  },
+  "scope": "Native test hosts with production UI and MQTT/SQLite; not installation packages. heap counts native allocator blocks, not JavaScript reachable objects. No forced GC, process replacement or WebView reload. RSS retention remains an observation; no specific underlying leak or cache root cause established."
+}

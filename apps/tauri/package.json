@@ -1,0 +1,23 @@
+{
+  "name": "@ineed-mqtt-tool/tauri",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "build": "vite build",
+    "dev:renderer": "vite"
+  },
+  "dependencies": {
+    "@ineed-mqtt-tool/mqtt-contract": "*",
+    "@ineed-mqtt-tool/runtime-contract": "*",
+    "@ineed-mqtt-tool/workbench": "*",
+    "@tauri-apps/api": "^2.8.0",
+    "@tauri-apps/plugin-clipboard-manager": "^2.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.6",
+    "vite": "^8.0.0"
+  }
+}

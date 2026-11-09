@@ -1,0 +1,274 @@
+{
+  "date": "2026-10-13",
+  "baselineHead": "7dfc7c9",
+  "uncommittedChanges": true,
+  "platform": "macOS arm64",
+  "nativeTauriTestHost": true,
+  "sourceDirectory": "/tmp/mqtt-desktop-soak-tDhK8q",
+  "startedUtc": "2026-10-13T09:07:51.641Z",
+  "configuredRatePerSecond": 500,
+  "actualRateIncludingExercises": 474.95,
+  "loadElapsedMs": 1202853,
+  "totalElapsedMs": 1389595,
+  "idleSeconds": 180,
+  "sentPerEndpoint": 571300,
+  "loadSamples": 20,
+  "idleSamples": 17,
+  "memory": {
+    "electron": {
+      "firstLoadMiB": 640.6,
+      "peakLoadMiB": 723.0,
+      "lastLoadMiB": 723.0,
+      "lastIdleMiB": 664.3
+    },
+    "tauri": {
+      "firstLoadMiB": 146.1,
+      "peakLoadMiB": 147.6,
+      "lastLoadMiB": 147.6,
+      "lastIdleMiB": 147.6
+    },
+    "webkitAssociated": {
+      "firstLoadMiB": 325.9,
+      "peakLoadMiB": 433.6,
+      "lastLoadMiB": 433.6,
+      "lastIdleMiB": 433.2
+    }
+  },
+  "historySequences": {
+    "electron": {
+      "rows": 571300,
+      "distinctSequences": 571300,
+      "minSequence": 1,
+      "maxSequence": 571300,
+      "invalidSequences": 0,
+      "quickCheck": "ok"
+    },
+    "tauri": {
+      "rows": 571300,
+      "distinctSequences": 571300,
+      "minSequence": 1,
+      "maxSequence": 571300,
+      "invalidSequences": 0,
+      "quickCheck": "ok"
+    }
+  },
+  "domRowsPerEndpoint": [
+    3
+  ],
+  "followingLatest": true,
+  "allSamplesVisible": true,
+  "rendererReloads": 0,
+  "sequenceErrors": 0,
+  "pageErrors": 0,
+  "screenshotErrors": 0,
+  "cleanup": {
+    "historyEmpty": true,
+    "brokerSockets": 0,
+    "brokerClosed": true,
+    "windowsRetained": false
+  },
+  "driverExitCode": 0,
+  "passed": true,
+  "samples": [
+    {
+      "minute": 1,
+      "sent": 29900,
+      "checkElapsedMs": 913,
+      "rssMiB": {
+        "electron": 640.6,
+        "tauri": 146.1,
+        "webkitAssociated": 325.9
+      }
+    },
+    {
+      "minute": 2,
+      "sent": 58600,
+      "checkElapsedMs": 950,
+      "rssMiB": {
+        "electron": 671.8,
+        "tauri": 146.2,
+        "webkitAssociated": 349.4
+      }
+    },
+    {
+      "minute": 3,
+      "sent": 87400,
+      "checkElapsedMs": 984,
+      "rssMiB": {
+        "electron": 666.5,
+        "tauri": 146.5,
+        "webkitAssociated": 363.9
+      }
+    },
+    {
+      "minute": 4,
+      "sent": 116000,
+      "checkElapsedMs": 1021,
+      "rssMiB": {
+        "electron": 680.6,
+        "tauri": 146.7,
+        "webkitAssociated": 380.5
+      }
+    },
+    {
+      "minute": 5,
+      "sent": 144500,
+      "checkElapsedMs": 1051,
+      "rssMiB": {
+        "electron": 683.0,
+        "tauri": 146.7,
+        "webkitAssociated": 391.7
+      }
+    },
+    {
+      "minute": 6,
+      "sent": 173100,
+      "checkElapsedMs": 1080,
+      "rssMiB": {
+        "electron": 671.5,
+        "tauri": 146.9,
+        "webkitAssociated": 398.3
+      }
+    },
+    {
+      "minute": 7,
+      "sent": 201600,
+      "checkElapsedMs": 1112,
+      "rssMiB": {
+        "electron": 685.3,
+        "tauri": 146.9,
+        "webkitAssociated": 404.2
+      }
+    },
+    {
+      "minute": 8,
+      "sent": 230200,
+      "checkElapsedMs": 1144,
+      "rssMiB": {
+        "electron": 685.1,
+        "tauri": 147.0,
+        "webkitAssociated": 404.9
+      }
+    },
+    {
+      "minute": 9,
+      "sent": 258700,
+      "checkElapsedMs": 1175,
+      "rssMiB": {
+        "electron": 685.3,
+        "tauri": 147.1,
+        "webkitAssociated": 410.8
+      }
+    },
+    {
+      "minute": 10,
+      "sent": 287200,
+      "checkElapsedMs": 1207,
+      "rssMiB": {
+        "electron": 687.4,
+        "tauri": 147.2,
+        "webkitAssociated": 415.5
+      }
+    },
+    {
+      "minute": 11,
+      "sent": 315700,
+      "checkElapsedMs": 1246,
+      "rssMiB": {
+        "electron": 688.1,
+        "tauri": 147.2,
+        "webkitAssociated": 422.2
+      }
+    },
+    {
+      "minute": 12,
+      "sent": 344100,
+      "checkElapsedMs": 1262,
+      "rssMiB": {
+        "electron": 718.9,
+        "tauri": 147.3,
+        "webkitAssociated": 427.1
+      }
+    },
+    {
+      "minute": 13,
+      "sent": 372600,
+      "checkElapsedMs": 1306,
+      "rssMiB": {
+        "electron": 718.9,
+        "tauri": 147.3,
+        "webkitAssociated": 427.5
+      }
+    },
+    {
+      "minute": 14,
+      "sent": 401000,
+      "checkElapsedMs": 1329,
+      "rssMiB": {
+        "electron": 719.3,
+        "tauri": 147.3,
+        "webkitAssociated": 427.1
+      }
+    },
+    {
+      "minute": 15,
+      "sent": 429400,
+      "checkElapsedMs": 1358,
+      "rssMiB": {
+        "electron": 720.8,
+        "tauri": 147.3,
+        "webkitAssociated": 427.6
+      }
+    },
+    {
+      "minute": 16,
+      "sent": 457800,
+      "checkElapsedMs": 1392,
+      "rssMiB": {
+        "electron": 720.7,
+        "tauri": 147.4,
+        "webkitAssociated": 427.7
+      }
+    },
+    {
+      "minute": 17,
+      "sent": 486200,
+      "checkElapsedMs": 1437,
+      "rssMiB": {
+        "electron": 722.0,
+        "tauri": 147.4,
+        "webkitAssociated": 428.5
+      }
+    },
+    {
+      "minute": 18,
+      "sent": 514600,
+      "checkElapsedMs": 1462,
+      "rssMiB": {
+        "electron": 722.6,
+        "tauri": 147.4,
+        "webkitAssociated": 429.3
+      }
+    },
+    {
+      "minute": 19,
+      "sent": 542900,
+      "checkElapsedMs": 1483,
+      "rssMiB": {
+        "electron": 722.9,
+        "tauri": 147.6,
+        "webkitAssociated": 430.4
+      }
+    },
+    {
+      "minute": 20,
+      "sent": 571300,
+      "checkElapsedMs": 1513,
+      "rssMiB": {
+        "electron": 723.0,
+        "tauri": 147.6,
+        "webkitAssociated": 433.6
+      }
+    }
+  ]
+}

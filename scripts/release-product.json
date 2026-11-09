@@ -1,0 +1,12 @@
+{
+  "product": "Ineed MQTT Tool",
+  "slug": "ineed-mqtt-tool",
+  "identifiers": {
+    "electron": "com.ineedfull.mqtt-tool",
+    "tauri": "com.ineedfull.mqtt-tool"
+  },
+  "runtimeDirectories": {
+    "electron": "apps/electron",
+    "tauri": "apps/tauri"
+  }
+}

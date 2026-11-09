@@ -1,0 +1,62 @@
+[
+  {
+    "product": "Ineed MQTT Tool",
+    "runtime": "electron",
+    "architecture": "arm64",
+    "bundleArchitecture": "arm64",
+    "identifier": "com.ineedfull.mqtt-tool",
+    "version": "0.1.0",
+    "minimumSystemVersion": "12.0",
+    "artifact": "/Users/pangzhigang/develop/com.ineedfull/ineed-mqtt-tool/release/desktop/0.1.0-20260921T012913798Z-0c0117e2/ineed-mqtt-tool-0.1.0-electron-macos-arm64.dmg",
+    "sha256": "6367c070906d11b51fad6c16fd1b3071b883e9fdbb63bc931c5bba56d21a610c",
+    "bundleMetadata": "passed",
+    "applicationLaunch": "not-run",
+    "installation": "not-run",
+    "codeSigning": "not-verified"
+  },
+  {
+    "product": "Ineed MQTT Tool",
+    "runtime": "electron",
+    "architecture": "x64",
+    "bundleArchitecture": "x86_64",
+    "identifier": "com.ineedfull.mqtt-tool",
+    "version": "0.1.0",
+    "minimumSystemVersion": "12.0",
+    "artifact": "/Users/pangzhigang/develop/com.ineedfull/ineed-mqtt-tool/release/desktop/0.1.0-20260921T012913798Z-0c0117e2/ineed-mqtt-tool-0.1.0-electron-macos-x64.dmg",
+    "sha256": "4836d8e67a499709aef86bd9deda35bb58b7adeef6de23e65f04437420b20472",
+    "bundleMetadata": "passed",
+    "applicationLaunch": "not-run",
+    "installation": "not-run",
+    "codeSigning": "not-verified"
+  },
+  {
+    "product": "Ineed MQTT Tool",
+    "runtime": "tauri",
+    "architecture": "arm64",
+    "bundleArchitecture": "arm64",
+    "identifier": "com.ineedfull.mqtt-tool",
+    "version": "0.1.0",
+    "minimumSystemVersion": "10.13",
+    "artifact": "/Users/pangzhigang/develop/com.ineedfull/ineed-mqtt-tool/release/desktop/0.1.0-20260921T013014924Z-db43e7de/ineed-mqtt-tool-0.1.0-tauri-macos-arm64.dmg",
+    "sha256": "56a43f607017df83a7f812ba0c72c84ebb69d852a2781e1fd796d6c54ff8d9f0",
+    "bundleMetadata": "passed",
+    "applicationLaunch": "not-run",
+    "installation": "not-run",
+    "codeSigning": "not-verified"
+  },
+  {
+    "product": "Ineed MQTT Tool",
+    "runtime": "tauri",
+    "architecture": "x64",
+    "bundleArchitecture": "x86_64",
+    "identifier": "com.ineedfull.mqtt-tool",
+    "version": "0.1.0",
+    "minimumSystemVersion": "10.13",
+    "artifact": "/Users/pangzhigang/develop/com.ineedfull/ineed-mqtt-tool/release/desktop/0.1.0-20260921T023155614Z-446d9134/ineed-mqtt-tool-0.1.0-tauri-macos-x64.dmg",
+    "sha256": "990533b5a5334bd2d8a697eee966351242a77d780dea34c8b3e1217ba66b31ee",
+    "bundleMetadata": "passed",
+    "applicationLaunch": "not-run",
+    "installation": "not-run",
+    "codeSigning": "not-verified"
+  }
+]

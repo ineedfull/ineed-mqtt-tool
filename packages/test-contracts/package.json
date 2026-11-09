@@ -1,0 +1,14 @@
+{
+  "name": "@ineed-mqtt-tool/test-contracts",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "create:fixtures": "node --disable-warning=ExperimentalWarning scripts/create-database-fixtures.mjs",
+    "test:database-compat": "node --disable-warning=ExperimentalWarning --test tests/databaseCompatibility.test.js"
+  }
+}

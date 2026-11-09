@@ -1,0 +1,416 @@
+{
+  "version": 2,
+  "browser": {
+    "name": "chromium",
+    "platform": "darwin",
+    "version": "149.0.7827.55"
+  },
+  "capture": {
+    "colorScheme": "light",
+    "deviceScaleFactor": 1,
+    "locale": "zh-CN",
+    "timezone": "Asia/Shanghai",
+    "viewport": {
+      "width": 1360,
+      "height": 860
+    }
+  },
+  "fonts": {
+    "assets": [
+      {
+        "file": "LICENSE-NOTO-SANS-SC",
+        "sha256": "18aabf190848725e2576eefb5c29ba06aac1029d02132252a7f312eac2e50cf3",
+        "size": 4314
+      },
+      {
+        "file": "LICENSE-ROBOTO-MONO",
+        "sha256": "b489132782690f2cc1ed23ab56d7057bbb08c42573603e8e704ae2e2ea9c8216",
+        "size": 4513
+      },
+      {
+        "file": "font.css",
+        "sha256": "207920ae8b718f866dad880e7295ee5c994d33c622820f61fbaffe0b52821436",
+        "size": 22205
+      },
+      {
+        "file": "noto-sans-sc-105-wght-normal.woff2",
+        "sha256": "8d8b4e6f4a00621d2be4279e9ba4b07cded89ab6d4018d9b87d2116867ead335",
+        "size": 61828
+      },
+      {
+        "file": "noto-sans-sc-107-wght-normal.woff2",
+        "sha256": "a42eff5010de7b0d6922a14734dd06c9b495655ac6e4397506f44c8e3eaee10c",
+        "size": 61076
+      },
+      {
+        "file": "noto-sans-sc-108-wght-normal.woff2",
+        "sha256": "91882203459867be07157e9c8d433372b65cd4ce484fda26b97b05ed2cf6290d",
+        "size": 64552
+      },
+      {
+        "file": "noto-sans-sc-109-wght-normal.woff2",
+        "sha256": "a91f8b038e5ce10805a173a293484c8c49552c275cf901cdf21324d6dca3ed17",
+        "size": 60372
+      },
+      {
+        "file": "noto-sans-sc-110-wght-normal.woff2",
+        "sha256": "bbca9081655c45233a25c4cca030c47ebcf2e156eeedd48110836658adb31fa0",
+        "size": 61472
+      },
+      {
+        "file": "noto-sans-sc-111-wght-normal.woff2",
+        "sha256": "372be010ac0e87cb12065a861da39821104a43d68345a62ca95d3d3e2fb2c269",
+        "size": 62664
+      },
+      {
+        "file": "noto-sans-sc-112-wght-normal.woff2",
+        "sha256": "34a4580239eae8dc54b726a1e1e9fec266e74225b112063ed93b412d54b97ccd",
+        "size": 57648
+      },
+      {
+        "file": "noto-sans-sc-113-wght-normal.woff2",
+        "sha256": "614ab8f616352583f92cc2130fe8812c5aaaa8560b3828de45eefb318be7b503",
+        "size": 58648
+      },
+      {
+        "file": "noto-sans-sc-114-wght-normal.woff2",
+        "sha256": "cf7b8344807a316e8db054500a2b44ad9346ffa00763fec203ab5aa1c99ff602",
+        "size": 57964
+      },
+      {
+        "file": "noto-sans-sc-115-wght-normal.woff2",
+        "sha256": "fb29957c7adccb9a89e34fb28d3d1c7d12bd7401f80c0dba6e1c9e5259cb3262",
+        "size": 56508
+      },
+      {
+        "file": "noto-sans-sc-116-wght-normal.woff2",
+        "sha256": "a98dc5a726f82141f74a827c443e120709a12fe737fabacf2530927a275fce0d",
+        "size": 52984
+      },
+      {
+        "file": "noto-sans-sc-117-wght-normal.woff2",
+        "sha256": "d94b5af0c14838af99bf9855f91e851878726558531ddef5bd2100b70dfbe90c",
+        "size": 52464
+      },
+      {
+        "file": "noto-sans-sc-118-wght-normal.woff2",
+        "sha256": "76c9ddb85ae4578cccd35ae4f6e6bbffaa2c8c2aec0fea17d3c17c84a3c6f7d1",
+        "size": 46192
+      },
+      {
+        "file": "noto-sans-sc-119-wght-normal.woff2",
+        "sha256": "b3b2374881f4cd93f239820dfd91f0fde8d52f8f92ba2888f7ab9cba21e4d7eb",
+        "size": 76800
+      },
+      {
+        "file": "noto-sans-sc-latin-wght-normal.woff2",
+        "sha256": "c1d919c8701a86ed7f33a8044f7c4e5675db2fce8b754091e97b2c0792f9782c",
+        "size": 25240
+      },
+      {
+        "file": "roboto-mono-latin-wght-normal.woff2",
+        "sha256": "b81cd55177300649be8f95b3b747d721ce607e8ed2856e25bd0c630cfd631faf",
+        "size": 32796
+      }
+    ],
+    "license": "SIL Open Font License 1.1",
+    "metadataSha256": "10a03d3e5570c57f0a4270aad24b18d073fa5279772e4046b616495cd6e49227",
+    "monoFamily": "Visual Roboto Mono",
+    "sources": [
+      {
+        "integrity": "sha512-lNar1dF7Ik/lHNPo/7JWG0TolXY29LtsqYgMvEysooZ5bsO9uH4shJmRrwyJ3PjyTPljhpMJEK0jDuLSU4vJ1w==",
+        "package": "@fontsource-variable/noto-sans-sc",
+        "url": "https://www.npmjs.com/package/@fontsource-variable/noto-sans-sc/v/5.3.0",
+        "version": "5.3.0"
+      },
+      {
+        "integrity": "sha512-h5r+KY/6qy8JEOj33JgcrFO81YAnvrc1EAwMpl/EPJLb2OIvOy0/jmB5M7qs7x/uXk5JUP5Ux4LrkeOK7faHkQ==",
+        "package": "@fontsource-variable/roboto-mono",
+        "url": "https://www.npmjs.com/package/@fontsource-variable/roboto-mono/v/5.3.0",
+        "version": "5.3.0"
+      }
+    ],
+    "uiFamily": "Visual Noto Sans SC"
+  },
+  "masks": [],
+  "reference": {
+    "dependencyClosureSha256": "39f2d91a451425d8663a9ef06895714f0518e2a8ad5e30f659f2bd4ee9ee60ae",
+    "dependencyLockSha256": "929db6c41ee951c18bb412780f7ae237977c2f5276db16e10c4c4f7a0e80a6e0",
+    "dependencyPackageCount": 127,
+    "entryCount": 86,
+    "managedFixtureMetadataSha256": "2732af6a3802504efdb9afa55a5380c5028fd998babb22d87c8eeb4ccd0505e0",
+    "manifest": "docs/verification/reference-manifests/electron.sha256",
+    "manifestSha256": "cda4c12e53f364e22fdbd35ff79cf82dd5204de00dff7ace2aa3a74618bfb357",
+    "source": "packages/workbench/e2e/fixtures/reference-renderer"
+  },
+  "sources": [
+    "current-electron",
+    "monorepo-electron",
+    "monorepo-tauri"
+  ],
+  "states": [
+    "main-messages",
+    "logs",
+    "connection-dialog",
+    "settings",
+    "message-history",
+    "log-history"
+  ],
+  "threshold": {
+    "boundingBoxMaxDeltaPx": 2,
+    "electronTauriDiffPixels": 0,
+    "pixelmatch": 0.1,
+    "referenceDiffPercentMax": 0.5
+  },
+  "configSha256": "806a92fb4da2bfbbded018e902834a4b73765d7a08bf24524e79ed1db373ce7d",
+  "metrics": {
+    "main-messages": {
+      "boxes": {
+        "electronTauriMaxDeltaPx": 0,
+        "referenceElectronMaxDeltaPx": 0,
+        "referenceTauriMaxDeltaPx": 0
+      },
+      "pixels": {
+        "electronTauri": {
+          "diffPercent": 0,
+          "diffPixels": 0
+        },
+        "referenceElectron": {
+          "diffPercent": 8.549931600547195e-7,
+          "diffPixels": 1
+        },
+        "referenceTauri": {
+          "diffPercent": 8.549931600547195e-7,
+          "diffPixels": 1
+        }
+      }
+    },
+    "logs": {
+      "boxes": {
+        "electronTauriMaxDeltaPx": 0,
+        "referenceElectronMaxDeltaPx": 0,
+        "referenceTauriMaxDeltaPx": 0
+      },
+      "pixels": {
+        "electronTauri": {
+          "diffPercent": 0,
+          "diffPixels": 0
+        },
+        "referenceElectron": {
+          "diffPercent": 8.549931600547195e-7,
+          "diffPixels": 1
+        },
+        "referenceTauri": {
+          "diffPercent": 8.549931600547195e-7,
+          "diffPixels": 1
+        }
+      }
+    },
+    "connection-dialog": {
+      "boxes": {
+        "electronTauriMaxDeltaPx": 0,
+        "referenceElectronMaxDeltaPx": 0,
+        "referenceTauriMaxDeltaPx": 0
+      },
+      "pixels": {
+        "electronTauri": {
+          "diffPercent": 0,
+          "diffPixels": 0
+        },
+        "referenceElectron": {
+          "diffPercent": 0.0010319767441860465,
+          "diffPixels": 1207
+        },
+        "referenceTauri": {
+          "diffPercent": 0.0010319767441860465,
+          "diffPixels": 1207
+        }
+      }
+    },
+    "settings": {
+      "boxes": {
+        "electronTauriMaxDeltaPx": 0,
+        "referenceElectronMaxDeltaPx": 0,
+        "referenceTauriMaxDeltaPx": 0
+      },
+      "pixels": {
+        "electronTauri": {
+          "diffPercent": 0,
+          "diffPixels": 0
+        },
+        "referenceElectron": {
+          "diffPercent": 0.00003334473324213406,
+          "diffPixels": 39
+        },
+        "referenceTauri": {
+          "diffPercent": 0.00003334473324213406,
+          "diffPixels": 39
+        }
+      }
+    },
+    "message-history": {
+      "boxes": {
+        "electronTauriMaxDeltaPx": 0,
+        "referenceElectronMaxDeltaPx": 0,
+        "referenceTauriMaxDeltaPx": 0
+      },
+      "pixels": {
+        "electronTauri": {
+          "diffPercent": 0,
+          "diffPixels": 0
+        },
+        "referenceElectron": {
+          "diffPercent": 0.0008823529411764706,
+          "diffPixels": 1032
+        },
+        "referenceTauri": {
+          "diffPercent": 0.0008823529411764706,
+          "diffPixels": 1032
+        }
+      }
+    },
+    "log-history": {
+      "boxes": {
+        "electronTauriMaxDeltaPx": 0,
+        "referenceElectronMaxDeltaPx": 0,
+        "referenceTauriMaxDeltaPx": 0
+      },
+      "pixels": {
+        "electronTauri": {
+          "diffPercent": 0,
+          "diffPixels": 0
+        },
+        "referenceElectron": {
+          "diffPercent": 0.0006053351573187414,
+          "diffPixels": 708
+        },
+        "referenceTauri": {
+          "diffPercent": 0.0006053351573187414,
+          "diffPixels": 708
+        }
+      }
+    }
+  },
+  "screenshots": {
+    "main-messages": {
+      "current-electron": {
+        "height": 860,
+        "path": "current-electron.png",
+        "sha256": "09de561a9ea4bf199d1a0be2f68bc250be3e3c6c29d321b05a5c63c08712b106",
+        "width": 1360
+      },
+      "monorepo-electron": {
+        "height": 860,
+        "path": "monorepo-electron.png",
+        "sha256": "02e6798accb42c8cbe0e4d76e6489a4ca7ae4035409cb9b8fa31a141a59f2afe",
+        "width": 1360
+      },
+      "monorepo-tauri": {
+        "height": 860,
+        "path": "monorepo-tauri.png",
+        "sha256": "02e6798accb42c8cbe0e4d76e6489a4ca7ae4035409cb9b8fa31a141a59f2afe",
+        "width": 1360
+      }
+    },
+    "logs": {
+      "current-electron": {
+        "height": 860,
+        "path": "logs/current-electron.png",
+        "sha256": "b2f126467b5c67fc8c7d855ec2ec4b6a04db8e4d8d069707a5c7b97bb2f537a4",
+        "width": 1360
+      },
+      "monorepo-electron": {
+        "height": 860,
+        "path": "logs/monorepo-electron.png",
+        "sha256": "9258d57cb8c8b724408c9f107d965cc960f3a97255419314285aa524ed46db08",
+        "width": 1360
+      },
+      "monorepo-tauri": {
+        "height": 860,
+        "path": "logs/monorepo-tauri.png",
+        "sha256": "9258d57cb8c8b724408c9f107d965cc960f3a97255419314285aa524ed46db08",
+        "width": 1360
+      }
+    },
+    "connection-dialog": {
+      "current-electron": {
+        "height": 860,
+        "path": "connection-dialog/current-electron.png",
+        "sha256": "74fcba24529fb863c56dc215fbade84ef3966bb20c9237f4e9ebe2972b4039b0",
+        "width": 1360
+      },
+      "monorepo-electron": {
+        "height": 860,
+        "path": "connection-dialog/monorepo-electron.png",
+        "sha256": "3bdaa0bb7921980a8d775c510f86b11d520673a1f31e5d033f2e17927216c459",
+        "width": 1360
+      },
+      "monorepo-tauri": {
+        "height": 860,
+        "path": "connection-dialog/monorepo-tauri.png",
+        "sha256": "3bdaa0bb7921980a8d775c510f86b11d520673a1f31e5d033f2e17927216c459",
+        "width": 1360
+      }
+    },
+    "settings": {
+      "current-electron": {
+        "height": 860,
+        "path": "settings/current-electron.png",
+        "sha256": "6e2ffa653a4630061ac36a4f953481aaa817b71352cb63287af693e51ab09c82",
+        "width": 1360
+      },
+      "monorepo-electron": {
+        "height": 860,
+        "path": "settings/monorepo-electron.png",
+        "sha256": "5e9d95e2f26e834d171489a2165fbefd36b365e5ed9b97d5e29918cf97067e6b",
+        "width": 1360
+      },
+      "monorepo-tauri": {
+        "height": 860,
+        "path": "settings/monorepo-tauri.png",
+        "sha256": "5e9d95e2f26e834d171489a2165fbefd36b365e5ed9b97d5e29918cf97067e6b",
+        "width": 1360
+      }
+    },
+    "message-history": {
+      "current-electron": {
+        "height": 860,
+        "path": "message-history/current-electron.png",
+        "sha256": "7dd90c1886d9141f115309072e0592737788a0d9985c9a9424032930f0caf4c2",
+        "width": 1360
+      },
+      "monorepo-electron": {
+        "height": 860,
+        "path": "message-history/monorepo-electron.png",
+        "sha256": "d726ab68a5691ea9f364f9ad875399484d7712cdd61f79bda7d4e78919c069ba",
+        "width": 1360
+      },
+      "monorepo-tauri": {
+        "height": 860,
+        "path": "message-history/monorepo-tauri.png",
+        "sha256": "d726ab68a5691ea9f364f9ad875399484d7712cdd61f79bda7d4e78919c069ba",
+        "width": 1360
+      }
+    },
+    "log-history": {
+      "current-electron": {
+        "height": 860,
+        "path": "log-history/current-electron.png",
+        "sha256": "cb191fe9fb5add9b139ac0c523a6e8e4fc24babe85a35173cedebf6dab3b27b3",
+        "width": 1360
+      },
+      "monorepo-electron": {
+        "height": 860,
+        "path": "log-history/monorepo-electron.png",
+        "sha256": "eafc6bd5d2a6d1f3e68b3b5e859a5b3d2bbb33165016483b046750a1451ae74a",
+        "width": 1360
+      },
+      "monorepo-tauri": {
+        "height": 860,
+        "path": "log-history/monorepo-tauri.png",
+        "sha256": "eafc6bd5d2a6d1f3e68b3b5e859a5b3d2bbb33165016483b046750a1451ae74a",
+        "width": 1360
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="title">
+  <title id="title">MQTT Tool — Ineed 品牌图标 v1</title>
+  <defs><linearGradient id="brand-gradient" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#07CFE5"/><stop offset=".55" stop-color="#3159DA"/><stop offset="1" stop-color="#BD35EF"/></linearGradient></defs>
+  <rect width="256" height="256" rx="58" fill="url(#brand-gradient)"/>
+  <g transform="translate(128 128) scale(1.2) translate(-128 -128)" color="#FFFFFF">
+    <circle cx="69" cy="78" r="12" fill="currentColor"/>
+    <path d="M69 119v60" fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round"/>
+    <path d="M117 179v-46q0-17 17-17h42M148 116V87h28M148 116v47h28" fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+    <g fill="currentColor">
+      <circle cx="179" cy="87" r="11"/>
+      <circle cx="179" cy="116" r="11"/>
+      <circle cx="179" cy="163" r="11"/>
+      <circle cx="117" cy="179" r="11"/>
+    </g>
+  </g>
+</svg>

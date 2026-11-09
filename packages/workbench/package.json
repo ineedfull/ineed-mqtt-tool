@@ -1,0 +1,48 @@
+{
+  "name": "@ineed-mqtt-tool/workbench",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "files": [
+    "src/"
+  ],
+  "exports": {
+    ".": "./src/createWorkbench.js",
+    "./base.css": "./src/styles/base.css",
+    "./runtimeContext.js": "./src/runtimeContext.js"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "test:components": "vitest run --config vitest.config.js",
+    "test:e2e": "playwright test --config playwright.config.js",
+    "test:visual": "playwright test --config playwright.visual.config.js"
+  },
+  "dependencies": {
+    "@lezer/highlight": "^1.2.3",
+    "@codemirror/commands": "6.10.4",
+    "@codemirror/lang-json": "6.0.2",
+    "@codemirror/language": "6.12.4",
+    "@codemirror/lint": "6.9.7",
+    "@codemirror/search": "6.7.1",
+    "@codemirror/state": "6.7.1",
+    "@codemirror/view": "6.43.6",
+    "@ineed-mqtt-tool/codecs": "*",
+    "@ineed-mqtt-tool/domain": "*",
+    "@ineed-mqtt-tool/mqtt-contract": "*",
+    "@ineed-mqtt-tool/persistence-contract": "*",
+    "@ineed-mqtt-tool/runtime-contract": "*",
+    "lucide-vue-next": "^0.468.0",
+    "vue": "^3.5.32"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@vitejs/plugin-vue": "^6.0.6",
+    "@vue/compiler-sfc": "^3.5.32",
+    "@vue/test-utils": "^2.4.6",
+    "jsdom": "^26.1.0",
+    "pixelmatch": "^7.2.0",
+    "pngjs": "^7.0.0",
+    "vitest": "^4.1.10"
+  }
+}

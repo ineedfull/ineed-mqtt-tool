@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "artifacts": [
+    {
+      "path": "assets/index-BorwPNuA.css",
+      "sha256": "0ddad7f7528a243fb3103f32055cdcb21344c31be97ae1b277a63d795b790cdf",
+      "size": 39821
+    },
+    {
+      "path": "assets/index-CVRF5-3c.js",
+      "sha256": "a161430e26636dd6054a91cabebe3431c39ae915a39f47d0bfcc29c8f20b7c6c",
+      "size": 503188
+    },
+    {
+      "path": "icon.png",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "index.html",
+      "sha256": "1e3c9e3b9720d931cfdd4a90998719baa6297fdf5accbc07342a69782246c857",
+      "size": 468
+    }
+  ],
+  "build": {
+    "command": "npm run build -- --outDir <managed-fixture> --emptyOutDir",
+    "dependencyMode": "temporary-npm-ci --ignore-scripts"
+  },
+  "dependencies": {
+    "closureSha256": "39f2d91a451425d8663a9ef06895714f0518e2a8ad5e30f659f2bd4ee9ee60ae",
+    "lockSha256": "929db6c41ee951c18bb412780f7ae237977c2f5276db16e10c4c4f7a0e80a6e0",
+    "packageCount": 127
+  },
+  "source": {
+    "entryCount": 86,
+    "manifest": "docs/verification/reference-manifests/electron.sha256",
+    "manifestSha256": "cda4c12e53f364e22fdbd35ff79cf82dd5204de00dff7ace2aa3a74618bfb357"
+  }
+}

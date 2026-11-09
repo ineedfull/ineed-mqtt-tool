@@ -1,0 +1,24 @@
+{
+  "name": "@ineed-mqtt-tool/domain",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js",
+    "./connection-model": "./src/connectionModel.js",
+    "./topic-matcher": "./src/topicMatcher.js",
+    "./subscription-coverage": "./src/subscriptionCoverage.js",
+    "./subscription-routing": "./src/subscriptionRouting.js",
+    "./connection-diagnostics": "./src/connectionDiagnostics.js"
+  },
+  "dependencies": {
+    "@ineed-mqtt-tool/mqtt-contract": "*"
+  },
+  "files": [
+    "src/"
+  ],
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  }
+}

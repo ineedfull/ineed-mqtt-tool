@@ -1,0 +1,11 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Default permissions for MQTT Tool application windows.",
+  "windows": ["main", "history-messages", "history-logs"],
+  "permissions": [
+    "core:default",
+    "clipboard-manager:allow-read-text",
+    "clipboard-manager:allow-write-text"
+  ]
+}

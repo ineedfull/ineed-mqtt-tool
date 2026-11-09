@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "file": "LICENSE-NOTO-SANS-SC",
+      "sha256": "18aabf190848725e2576eefb5c29ba06aac1029d02132252a7f312eac2e50cf3",
+      "size": 4314
+    },
+    {
+      "file": "LICENSE-ROBOTO-MONO",
+      "sha256": "b489132782690f2cc1ed23ab56d7057bbb08c42573603e8e704ae2e2ea9c8216",
+      "size": 4513
+    },
+    {
+      "file": "font.css",
+      "sha256": "207920ae8b718f866dad880e7295ee5c994d33c622820f61fbaffe0b52821436",
+      "size": 22205
+    },
+    {
+      "file": "noto-sans-sc-105-wght-normal.woff2",
+      "sha256": "8d8b4e6f4a00621d2be4279e9ba4b07cded89ab6d4018d9b87d2116867ead335",
+      "size": 61828
+    },
+    {
+      "file": "noto-sans-sc-107-wght-normal.woff2",
+      "sha256": "a42eff5010de7b0d6922a14734dd06c9b495655ac6e4397506f44c8e3eaee10c",
+      "size": 61076
+    },
+    {
+      "file": "noto-sans-sc-108-wght-normal.woff2",
+      "sha256": "91882203459867be07157e9c8d433372b65cd4ce484fda26b97b05ed2cf6290d",
+      "size": 64552
+    },
+    {
+      "file": "noto-sans-sc-109-wght-normal.woff2",
+      "sha256": "a91f8b038e5ce10805a173a293484c8c49552c275cf901cdf21324d6dca3ed17",
+      "size": 60372
+    },
+    {
+      "file": "noto-sans-sc-110-wght-normal.woff2",
+      "sha256": "bbca9081655c45233a25c4cca030c47ebcf2e156eeedd48110836658adb31fa0",
+      "size": 61472
+    },
+    {
+      "file": "noto-sans-sc-111-wght-normal.woff2",
+      "sha256": "372be010ac0e87cb12065a861da39821104a43d68345a62ca95d3d3e2fb2c269",
+      "size": 62664
+    },
+    {
+      "file": "noto-sans-sc-112-wght-normal.woff2",
+      "sha256": "34a4580239eae8dc54b726a1e1e9fec266e74225b112063ed93b412d54b97ccd",
+      "size": 57648
+    },
+    {
+      "file": "noto-sans-sc-113-wght-normal.woff2",
+      "sha256": "614ab8f616352583f92cc2130fe8812c5aaaa8560b3828de45eefb318be7b503",
+      "size": 58648
+    },
+    {
+      "file": "noto-sans-sc-114-wght-normal.woff2",
+      "sha256": "cf7b8344807a316e8db054500a2b44ad9346ffa00763fec203ab5aa1c99ff602",
+      "size": 57964
+    },
+    {
+      "file": "noto-sans-sc-115-wght-normal.woff2",
+      "sha256": "fb29957c7adccb9a89e34fb28d3d1c7d12bd7401f80c0dba6e1c9e5259cb3262",
+      "size": 56508
+    },
+    {
+      "file": "noto-sans-sc-116-wght-normal.woff2",
+      "sha256": "a98dc5a726f82141f74a827c443e120709a12fe737fabacf2530927a275fce0d",
+      "size": 52984
+    },
+    {
+      "file": "noto-sans-sc-117-wght-normal.woff2",
+      "sha256": "d94b5af0c14838af99bf9855f91e851878726558531ddef5bd2100b70dfbe90c",
+      "size": 52464
+    },
+    {
+      "file": "noto-sans-sc-118-wght-normal.woff2",
+      "sha256": "76c9ddb85ae4578cccd35ae4f6e6bbffaa2c8c2aec0fea17d3c17c84a3c6f7d1",
+      "size": 46192
+    },
+    {
+      "file": "noto-sans-sc-119-wght-normal.woff2",
+      "sha256": "b3b2374881f4cd93f239820dfd91f0fde8d52f8f92ba2888f7ab9cba21e4d7eb",
+      "size": 76800
+    },
+    {
+      "file": "noto-sans-sc-latin-wght-normal.woff2",
+      "sha256": "c1d919c8701a86ed7f33a8044f7c4e5675db2fce8b754091e97b2c0792f9782c",
+      "size": 25240
+    },
+    {
+      "file": "roboto-mono-latin-wght-normal.woff2",
+      "sha256": "b81cd55177300649be8f95b3b747d721ce607e8ed2856e25bd0c630cfd631faf",
+      "size": 32796
+    }
+  ],
+  "fonts": {
+    "mono": {
+      "family": "Visual Roboto Mono",
+      "file": "roboto-mono-latin-wght-normal.woff2"
+    },
+    "ui": {
+      "family": "Visual Noto Sans SC",
+      "files": [
+        "noto-sans-sc-105-wght-normal.woff2",
+        "noto-sans-sc-107-wght-normal.woff2",
+        "noto-sans-sc-108-wght-normal.woff2",
+        "noto-sans-sc-109-wght-normal.woff2",
+        "noto-sans-sc-110-wght-normal.woff2",
+        "noto-sans-sc-111-wght-normal.woff2",
+        "noto-sans-sc-112-wght-normal.woff2",
+        "noto-sans-sc-113-wght-normal.woff2",
+        "noto-sans-sc-114-wght-normal.woff2",
+        "noto-sans-sc-115-wght-normal.woff2",
+        "noto-sans-sc-116-wght-normal.woff2",
+        "noto-sans-sc-117-wght-normal.woff2",
+        "noto-sans-sc-118-wght-normal.woff2",
+        "noto-sans-sc-119-wght-normal.woff2",
+        "noto-sans-sc-latin-wght-normal.woff2"
+      ]
+    }
+  },
+  "license": "SIL Open Font License 1.1",
+  "sources": [
+    {
+      "integrity": "sha512-lNar1dF7Ik/lHNPo/7JWG0TolXY29LtsqYgMvEysooZ5bsO9uH4shJmRrwyJ3PjyTPljhpMJEK0jDuLSU4vJ1w==",
+      "package": "@fontsource-variable/noto-sans-sc",
+      "url": "https://www.npmjs.com/package/@fontsource-variable/noto-sans-sc/v/5.3.0",
+      "version": "5.3.0"
+    },
+    {
+      "integrity": "sha512-h5r+KY/6qy8JEOj33JgcrFO81YAnvrc1EAwMpl/EPJLb2OIvOy0/jmB5M7qs7x/uXk5JUP5Ux4LrkeOK7faHkQ==",
+      "package": "@fontsource-variable/roboto-mono",
+      "url": "https://www.npmjs.com/package/@fontsource-variable/roboto-mono/v/5.3.0",
+      "version": "5.3.0"
+    }
+  ]
+}

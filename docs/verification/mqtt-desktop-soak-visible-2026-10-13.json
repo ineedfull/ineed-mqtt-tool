@@ -1,0 +1,141 @@
+{
+  "date": "2026-10-13",
+  "evidenceDirectory": "/tmp/mqtt-desktop-soak-ZpNg0Y",
+  "passed": true,
+  "loadElapsedMs": 1202824,
+  "totalElapsedMs": 1390072,
+  "targetMessagesPerSecond": 500,
+  "actualMessagesPerSecondIncludingActions": 476.3,
+  "sentPerRuntime": 572900,
+  "loadSamples": 20,
+  "idleSamples": 16,
+  "idleSeconds": 180,
+  "expectVisible": true,
+  "keepWindows": true,
+  "diagnosticCss": "",
+  "cleanup": {
+    "event": "cleanup",
+    "brokerSockets": 0,
+    "brokerClosed": true,
+    "windowsRetained": true,
+    "out": "/tmp/mqtt-desktop-soak-ZpNg0Y"
+  },
+  "databaseChecksAfterCleanup": {
+    "electron": [
+      {
+        "file": "electron-profile/ineed-mqtt.db",
+        "quickCheck": "ok"
+      }
+    ],
+    "tauri": [
+      {
+        "file": "tauri-profile/ineed-mqtt.db",
+        "quickCheck": "ok"
+      }
+    ]
+  },
+  "runtimes": {
+    "electron": {
+      "received": 572900,
+      "historyTotal": 572900,
+      "gaps": 0,
+      "duplicates": 0,
+      "invalidPayload": 0,
+      "errors": [],
+      "visibility": "visible",
+      "visibilityEvents": [],
+      "started": 1791861120402,
+      "afterCleanup": [],
+      "persistenceIpc": {
+        "rows": 0,
+        "calls": 0,
+        "maxMs": 0,
+        "totalMs": 0
+      },
+      "rootWidth": 1120
+    },
+    "tauri": {
+      "received": 572900,
+      "historyTotal": 572900,
+      "gaps": 0,
+      "duplicates": 0,
+      "invalidPayload": 0,
+      "errors": [],
+      "visibility": "visible",
+      "visibilityEvents": [],
+      "started": 1791861122873,
+      "afterCleanup": [],
+      "persistenceIpc": {
+        "calls": 2883,
+        "maxMs": 61,
+        "rows": 572900,
+        "totalMs": 111668
+      },
+      "rootWidth": 1120
+    }
+  },
+  "resources": {
+    "electron": {
+      "rssMiB": {
+        "firstLoadSample": 720.2,
+        "peakAcrossLoadAndIdle": 835.5,
+        "lastLoadSample": 834.3,
+        "lastIdleSample": 732.8
+      },
+      "cpuPercentLoadSampleRange": [
+        34.9,
+        91.8
+      ],
+      "pidsAcrossSamples": [
+        91534,
+        91535,
+        91536,
+        91538
+      ]
+    },
+    "tauri": {
+      "rssMiB": {
+        "firstLoadSample": 146.3,
+        "peakAcrossLoadAndIdle": 148.8,
+        "lastLoadSample": 148.8,
+        "lastIdleSample": 148.7
+      },
+      "cpuPercentLoadSampleRange": [
+        10,
+        21.1
+      ],
+      "pidsAcrossSamples": [
+        91580
+      ]
+    },
+    "webkitAssociated": {
+      "rssMiB": {
+        "firstLoadSample": 497.2,
+        "peakAcrossLoadAndIdle": 1425.1,
+        "lastLoadSample": 1425.1,
+        "lastIdleSample": 1424.6
+      },
+      "cpuPercentLoadSampleRange": [
+        4.5,
+        44.6
+      ],
+      "pidsAcrossSamples": [
+        91581,
+        91582,
+        91583
+      ]
+    }
+  },
+  "catchupWaitMsRange": [
+    908,
+    1523
+  ],
+  "measurementLimits": [
+    "RSS sums can count shared pages more than once.",
+    "WebKit association is estimated from new process IDs at native host startup.",
+    "CPU samples are taken after each publishing pause; they are not sustained load averages.",
+    "WebKit RSS grew during load and did not fall during three-minute idle; this run does not rule out a memory issue.",
+    "The stronger concurrent-load history overflow remains a known boundary.",
+    "The retained driver does not exit while windows remain open."
+  ]
+}

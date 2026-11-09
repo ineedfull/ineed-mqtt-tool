@@ -1,0 +1,96 @@
+{
+  "evidence": "/tmp/mqtt-desktop-soak-FkARaT",
+  "passed": true,
+  "runnerExitCode": 0,
+  "mode": "Tauri hidden, Electron visible",
+  "durationSeconds": 1200,
+  "loadElapsedMs": 1204363,
+  "totalElapsedMs": 1389381,
+  "sentPerRuntime": 562100,
+  "targetRatePerSecond": 500,
+  "meanRatePerSecond": 466.7,
+  "idleSeconds": 180,
+  "catchupWaitMs": {
+    "min": 1787,
+    "max": 3145
+  },
+  "memoryMiB": {
+    "electron": {
+      "first": 788.1,
+      "peak": 895.7,
+      "loadLast": 879.5,
+      "idleLast": 768.9
+    },
+    "tauri": {
+      "first": 142.5,
+      "peak": 143.6,
+      "loadLast": 108.8,
+      "idleLast": 108.7
+    },
+    "webkitAssociated": {
+      "first": 247.7,
+      "peak": 309.5,
+      "loadLast": 293.0,
+      "idleLast": 286.7
+    }
+  },
+  "runtimes": {
+    "electron": {
+      "received": 562100,
+      "historyTotal": 562100,
+      "gaps": 0,
+      "duplicates": 0,
+      "invalidPayload": 0,
+      "errors": [],
+      "started": 1791817323898,
+      "domMessages": 300,
+      "finalCounts": [
+        {
+          "connection_id": "desktop-soak",
+          "messages_in": 562100,
+          "messages_out": 0
+        }
+      ],
+      "afterCleanup": []
+    },
+    "tauri": {
+      "received": 562100,
+      "historyTotal": 562100,
+      "gaps": 0,
+      "duplicates": 0,
+      "invalidPayload": 0,
+      "errors": [],
+      "started": 1791817325250,
+      "domMessages": 300,
+      "finalCounts": [
+        {
+          "connection_id": "desktop-soak",
+          "messages_in": 562100,
+          "messages_out": 0
+        }
+      ],
+      "afterCleanup": []
+    }
+  },
+  "foregroundRecovery": {
+    "started": 1791817325250,
+    "received": 562100,
+    "historyTotal": 562100,
+    "visibility": "visible",
+    "rootWidth": 1360,
+    "latestRenderedSequence": 562100,
+    "errors": []
+  },
+  "webkitPidsDuringLoad": [
+    18592,
+    18593,
+    18594
+  ],
+  "webkitPidsDuringIdle": [
+    18592,
+    18593,
+    18594
+  ],
+  "brokerClosed": true,
+  "brokerSockets": 0
+}

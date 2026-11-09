@@ -1,0 +1,43 @@
+/* Keep these semantic sizes aligned with LinkLab's typography.css. */
+:root {
+  --font-size: 13px;
+  --font-size-small: 11px;
+  --font-size-control: 12px;
+  --font-size-heading: 14px;
+  --font-size-title: 15px;
+  --font-size-display: 20px;
+  --font-size-code: 13px;
+}
+:is(.mqtt-app, .history-page).large-font {
+  --font-size: 14px;
+  --font-size-small: 12px;
+  --font-size-control: 13px;
+  --font-size-heading: 15px;
+  --font-size-title: 16px;
+  --font-size-display: 21px;
+  --font-size-code: 16px;
+}
+.mqtt-app, .history-page {
+  font-size: var(--font-size);
+}
+:is(.mqtt-app, .history-page) :is(input, select, textarea, label, .modal__btn, .toolbar-btn, .publish-bar__fmt, .publish-bar__send, .publish-bar__timer-btn, .tree-toolbar button) {
+  font-size: var(--font-size-control);
+}
+:where(.mqtt-app, .history-page) :where(small) { font-size: var(--font-size-small); }
+:where(.mqtt-app, .history-page) :where(code) { font-size: inherit; }
+.history-page .history-list__head { font-size: var(--font-size-control); }
+.history-page .history-row, .mqtt-app .log-line { font-size: var(--font-size); }
+.mqtt-app .chat-msg__bubble,
+.mqtt-app .payload-editor .cm-scroller,
+.mqtt-app .payload-editor .cm-editor,
+.mqtt-app .message-inspector pre,
+.history-page .history-detail pre { font-size: var(--font-size-code); }
+.history-page .history-detail__topic-value { font-size: var(--font-size-control); }
+.history-page .history-header h1 { font-size: var(--font-size-title); }
+
+/* About keeps its shared layout; MQTT supplies the same scale as LinkLab. */
+.mqtt-app .about-panel.desktop-about { font-size: var(--font-size); }
+.mqtt-app .desktop-about > header h2 { font-size: var(--font-size-title); }
+.mqtt-app .desktop-about .about-panel__product strong { font-size: var(--font-size-display); }
+.mqtt-app .desktop-about :is(.about-panel__product span, .about-panel__note, .about-panel__button) { font-size: var(--font-size-control); }
+.mqtt-app .desktop-about .about-panel__body small { font-size: var(--font-size-small); }

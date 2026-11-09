@@ -1,0 +1,164 @@
+{
+  "status": "root cause still under investigation",
+  "platform": "macOS arm64",
+  "nativeBranding": {
+    "electron": {
+      "menus": [
+        "Apple",
+        "iNeed MQTT Tool",
+        "编辑"
+      ],
+      "expected": "iNeed MQTT Tool",
+      "passed": true,
+      "pid": 19135,
+      "name": "iNeed MQTT Tool"
+    },
+    "tauri": {
+      "menus": [
+        "Apple",
+        "iNeed MQTT Tool",
+        "File",
+        "Edit",
+        "View",
+        "Window",
+        "Help"
+      ],
+      "name": "iNeed MQTT Tool",
+      "expected": "iNeed MQTT Tool",
+      "passed": true,
+      "pid": 19151
+    },
+    "trafficPerRuntime": 500
+  },
+  "liveJavascriptHeap": {
+    "run": "/tmp/mqtt-desktop-soak-XGgGyE",
+    "trafficPerRuntime": 58600,
+    "snapshotPerformsFullGC": true,
+    "stages": [
+      {
+        "stage": "baseline",
+        "nodes": 31949,
+        "estimatedBytes": 3443196,
+        "realtimeMessageObjects": 0
+      },
+      {
+        "stage": "cycle1-cleared",
+        "nodes": 41556,
+        "estimatedBytes": 4829621,
+        "realtimeMessageObjects": 0
+      },
+      {
+        "stage": "cycle1-disconnect-idle",
+        "nodes": 38647,
+        "estimatedBytes": 3704924,
+        "realtimeMessageObjects": 0
+      },
+      {
+        "stage": "cycle1-loaded",
+        "nodes": 42715,
+        "estimatedBytes": 4072540,
+        "realtimeMessageObjects": 300
+      }
+    ]
+  },
+  "withoutInspector": {
+    "run": "/tmp/mqtt-desktop-soak-uxplea",
+    "passed": true,
+    "sentPerRuntime": 58400,
+    "elapsedMs": 246842,
+    "databaseSequences": {
+      "electron": {
+        "rows": 58400,
+        "distinctSequences": 58400,
+        "minSequence": 1,
+        "maxSequence": 58400,
+        "invalidSequences": 0,
+        "quickCheck": "ok"
+      },
+      "tauri": {
+        "rows": 58400,
+        "distinctSequences": 58400,
+        "minSequence": 1,
+        "maxSequence": 58400,
+        "invalidSequences": 0,
+        "quickCheck": "ok"
+      }
+    },
+    "stages": [
+      {
+        "stage": "baseline",
+        "sent": 0,
+        "webContentPid": 20339,
+        "webContentRssMiB": 70.38,
+        "heapAllocatedBytes": 28445616,
+        "heapFootprint": "182.3M"
+      },
+      {
+        "stage": "cycle1-loaded",
+        "sent": 58400,
+        "webContentPid": 20339,
+        "webContentRssMiB": 242.16,
+        "heapAllocatedBytes": 148211888,
+        "heapFootprint": "301.5M"
+      },
+      {
+        "stage": "cycle1-idle",
+        "sent": 58400,
+        "webContentPid": 20339,
+        "webContentRssMiB": 239.28,
+        "heapAllocatedBytes": 113946176,
+        "heapFootprint": "163.0M"
+      },
+      {
+        "stage": "cycle1-cleared",
+        "sent": 58400,
+        "webContentPid": 20339,
+        "webContentRssMiB": 239.39,
+        "heapAllocatedBytes": 114695168,
+        "heapFootprint": "154.6M"
+      },
+      {
+        "stage": "cycle1-clear-idle",
+        "sent": 58400,
+        "webContentPid": 20339,
+        "webContentRssMiB": 239.28,
+        "heapAllocatedBytes": 113380160,
+        "heapFootprint": "156.1M"
+      },
+      {
+        "stage": "cycle1-disconnected",
+        "sent": 58400,
+        "webContentPid": 20339,
+        "webContentRssMiB": 239.41,
+        "heapAllocatedBytes": 113441856,
+        "heapFootprint": "169.8M"
+      },
+      {
+        "stage": "cycle1-disconnect-idle",
+        "sent": 58400,
+        "webContentPid": 20339,
+        "webContentRssMiB": 239.3,
+        "heapAllocatedBytes": 113485744,
+        "heapFootprint": "156.2M"
+      },
+      {
+        "stage": "cleanup-connected",
+        "sent": 58400,
+        "webContentPid": 20339,
+        "webContentRssMiB": 239.42,
+        "heapAllocatedBytes": 113589264,
+        "heapFootprint": "170.0M"
+      }
+    ],
+    "forcedGC": false,
+    "inspectorOpened": false,
+    "pageReloadedDuringLoad": false
+  },
+  "limitations": [
+    "Heap snapshot estimates live JS cells and invokes Full GC; it is diagnostic, not normal soak acceptance.",
+    "Sampled reverse native reference trees do not identify all allocation sites; several reach common VM/global data and can include conservative false references.",
+    "xctrace Allocations attach was rejected for SIP restricted WebContent; no allocation stack captured.",
+    "Native heap and RSS remaining above baseline are not yet attributed to a specific cache or leak."
+  ],
+  "publication": "Not committed or released; isolated profiles and local loopback broker only."
+}

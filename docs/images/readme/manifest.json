@@ -1,0 +1,93 @@
+[
+  {
+    "file": "workbench.webp",
+    "sourceRepository": "ineed-mqtt-website",
+    "sourcePath": "public/images/app/2026-11-02/workbench.webp",
+    "capturedAt": "2026-11-02",
+    "runtime": "Electron 原生开发宿主",
+    "productVersion": "0.1.0",
+    "data": "隔离演示数据；原生宿主截图不代表所有平台或安装包验收",
+    "transformation": "原文件复制，未修改像素",
+    "width": 1520,
+    "height": 1040,
+    "sha256": "5ee881585fe3e303bf8bccba94ba4b3027db2d0de76959d5d09cac02a08ea367"
+  },
+  {
+    "file": "topic-json.webp",
+    "sourceRepository": "ineed-mqtt-website",
+    "sourcePath": "public/images/app/2026-11-02/topic-json.webp",
+    "capturedAt": "2026-11-02",
+    "runtime": "Electron 原生开发宿主",
+    "productVersion": "0.1.0",
+    "data": "隔离演示数据；原生宿主截图不代表所有平台或安装包验收",
+    "transformation": "原文件复制，未修改像素",
+    "width": 1520,
+    "height": 1040,
+    "sha256": "502187dbb42f0788401a9833417f1bf6f2bd388eb3d3ad6eeff2e593df312d58"
+  },
+  {
+    "file": "topic-hex.webp",
+    "sourceRepository": "ineed-mqtt-website",
+    "sourcePath": "public/images/app/2026-11-02/topic-hex.webp",
+    "capturedAt": "2026-11-02",
+    "runtime": "Electron 原生开发宿主",
+    "productVersion": "0.1.0",
+    "data": "隔离演示数据；原生宿主截图不代表所有平台或安装包验收",
+    "transformation": "原文件复制，未修改像素",
+    "width": 1520,
+    "height": 1040,
+    "sha256": "7186e6b6e855dcfc771073599af39dc949c8c2b9b00b8542d893613ae7877bd1"
+  },
+  {
+    "file": "history.webp",
+    "sourceRepository": "ineed-mqtt-website",
+    "sourcePath": "public/images/app/2026-11-02/history.webp",
+    "capturedAt": "2026-11-02",
+    "runtime": "Electron 原生开发宿主",
+    "productVersion": "0.1.0",
+    "data": "隔离演示数据；原生宿主截图不代表所有平台或安装包验收",
+    "transformation": "原文件复制，未修改像素",
+    "width": 1180,
+    "height": 728,
+    "sha256": "1e63aa748d0ba5f8e88a7b5a39c5a0c4855d63aa4186d74b026ac0c63c8253d4"
+  },
+  {
+    "file": "scheduled-send.webp",
+    "sourceRepository": "ineed-mqtt-website",
+    "sourcePath": "public/images/app/2026-11-02/scheduled-send.webp",
+    "capturedAt": "2026-11-02",
+    "runtime": "Electron 原生开发宿主",
+    "productVersion": "0.1.0",
+    "data": "隔离演示数据；原生宿主截图不代表所有平台或安装包验收",
+    "transformation": "原文件复制，未修改像素",
+    "width": 1020,
+    "height": 340,
+    "sha256": "e38217bce037be348defff663337f06d33c7fe1ff6f6158ab5695b2cd66b863e"
+  },
+  {
+    "file": "message-scenarios.webp",
+    "sourceRepository": "ineed-mqtt-website",
+    "sourcePath": "public/images/app/2026-11-01/message-scenarios.webp",
+    "capturedAt": "2026-11-01",
+    "runtime": "Electron 原生开发宿主",
+    "productVersion": "0.1.0",
+    "data": "隔离演示数据；原生宿主截图不代表所有平台或安装包验收",
+    "transformation": "原文件复制，未修改像素",
+    "width": 2240,
+    "height": 1496,
+    "sha256": "d05fa3511f50ed4af252a0ec693fb0e387eae87b867eae49adb20600b5a61b34"
+  },
+  {
+    "file": "wechat-qr.png",
+    "sourceRepository": "ineed-mqtt-website",
+    "sourcePath": "public/images/wechat-qr.png",
+    "purpose": "扫码加微信，非公众号二维码",
+    "sha256": "e28ce35e9bd504f878ed7f17d4b5acbf2da817e24a3fe9eb9bacac78a5fccfd0",
+    "transformation": "原文件复制，未缩小或重绘"
+  },
+  {
+    "file": "logo.svg",
+    "source": "本产品现用 SVG 品牌副本",
+    "sha256": "cfb216f7c9e8a5ba6a095df9f8cf5dc7114075e742a536b46f47dd992c3037a1"
+  }
+]

@@ -1,0 +1,68 @@
+{
+  "name": "ineed-mqtt-tool",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "allowScripts": {
+    "electron": true
+  },
+  "scripts": {
+    "icons:generate": "node scripts/generate-app-icons.mjs",
+    "test": "node --test",
+    "test:shared": "node --test packages/*/tests/*.test.js scripts/*.test.mjs",
+    "test:electron": "node --test apps/electron/tests/databaseCompatibility.test.js apps/electron/tests/electronArchitecture.test.js apps/electron/tests/ipcSecurity.test.js apps/electron/tests/mainHandlers.test.js apps/electron/tests/updateController.test.js apps/electron/tests/updatePreparation.test.js apps/electron/tests/messageBatcher.test.js apps/electron/tests/mqttDiagnostics.test.js apps/electron/tests/mqttRuntime.test.js apps/electron/tests/receivedHistory.test.js apps/electron/tests/packageBoundary.test.js apps/electron/tests/preloadBoundary.test.js apps/electron/tests/runtimeAdapter.test.js apps/electron/tests/shutdownLifecycle.test.js apps/electron/tests/windowLifecycle.test.js",
+    "test:electron:boundary": "node --test apps/electron/tests/electronBoundary.test.js",
+    "test:electron:clipboard": "node --test apps/electron/tests/clipboardSmoke.test.js",
+    "test:electron:subscriptions": "node --test apps/electron/tests/subscriptionsSmoke.test.js",
+    "test:electron:smoke": "node --test apps/electron/tests/electronSmoke.test.js",
+    "test:tauri": "node --test apps/tauri/tests/databaseContract.test.js apps/tauri/tests/mqttContract.test.js apps/tauri/tests/runtimeAdapter.test.js apps/tauri/tests/readinessReporter.test.js apps/tauri/tests/tauriBoundary.test.js",
+    "test:tauri:smoke": "node --test apps/tauri/tests/tauriSmoke.test.js",
+    "test:mqtt-contract": "node --test packages/test-contracts/tests/mqttRuntimeContract*.test.js",
+    "test:load": "node tooling/mqtt-load-test/loadRunner.mjs",
+    "test:load:small": "node tooling/mqtt-load-test/loadRunner.mjs --total-messages=40 --payload-bytes=256 --publish-concurrency=4 --publish-rate-per-second=2000 --timeout-ms=90000",
+    "test:components": "npm run test:components -w @ineed-mqtt-tool/workbench",
+    "test:e2e": "npm run test:e2e -w @ineed-mqtt-tool/workbench",
+    "test:visual": "npm run test:visual -w @ineed-mqtt-tool/workbench",
+    "lint": "eslint . --max-warnings 0",
+    "build:renderers": "npm run build -w @ineed-mqtt-tool/electron && npm run build -w @ineed-mqtt-tool/tauri",
+    "package:all": "node scripts/release-packaging.mjs",
+    "verify:packages": "node scripts/verify-release-packages.mjs",
+    "dev:electron": "npm run dev -w @ineed-mqtt-tool/electron",
+    "dev:electron:renderer": "npm run dev:renderer -w @ineed-mqtt-tool/electron",
+    "dev:tauri": "npm run dev:renderer -w @ineed-mqtt-tool/tauri",
+    "verify:electron": "npm run test:shared && npm run test:electron && npm run lint && npm run build -w @ineed-mqtt-tool/electron && npm run test:electron:boundary && npm run test:electron:clipboard && npm run test:electron:subscriptions && npm run test:electron:smoke && git diff --check",
+    "verify:tauri": "npm run test:shared && npm run test:tauri && npm run lint && npm run build -w @ineed-mqtt-tool/tauri && cargo fmt --manifest-path apps/tauri/src-tauri/Cargo.toml -- --check && cargo check --locked --manifest-path apps/tauri/src-tauri/Cargo.toml && cargo test --locked --manifest-path apps/tauri/src-tauri/Cargo.toml && cargo build --locked --manifest-path apps/tauri/src-tauri/Cargo.toml && npm run test:tauri:smoke && git diff --check",
+    "release:plan": "node scripts/desktop-release.mjs plan",
+    "release:build": "node scripts/desktop-release.mjs build",
+    "release:verify": "node scripts/desktop-release.mjs verify",
+    "release:upload": "node scripts/release-upload.mjs",
+    "test:release": "node --test scripts/desktop-release.test.mjs scripts/release-upload.test.mjs",
+    "package:win": "node scripts/desktop-release.mjs build --platform=windows --arch=x64",
+    "package:linux": "node scripts/desktop-release.mjs build --platform=linux --arch=x64",
+    "package:desktop:mac": "node scripts/desktop-release.mjs build --platform=macos --arch=all",
+    "test:updates": "node --test apps/electron/tests/updateController.test.js apps/electron/tests/updatePreparation.test.js packages/workbench/tests/updatePreparation.test.js scripts/update-release.test.mjs",
+    "release:updates:plan": "node scripts/update-release.mjs plan",
+    "release:updates:build": "node scripts/update-release.mjs build",
+    "release:updates:verify": "node scripts/update-release.mjs verify",
+    "release:updates:upload": "node scripts/update-release.mjs upload",
+    "test:updates:ui": "playwright test --config packages/workbench/playwright.updates.config.js",
+    "test:updates:signing": "cargo test --locked --manifest-path apps/tauri/src-tauri/Cargo.toml --features release-signing --test update_signing_cli"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@tauri-apps/cli": "2.11.4",
+    "aedes": "^1.1.1",
+    "electron": "43.1.0",
+    "eslint": "^10.7.0",
+    "globals": "^16.5.0",
+    "mqtt": "^5.15.2"
+  }
+}

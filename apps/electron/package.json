@@ -1,0 +1,91 @@
+{
+  "name": "@ineed-mqtt-tool/electron",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "private": true,
+  "main": "electron/main.cjs",
+  "productName": "Ineed MQTT Tool",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "test": "node --test",
+    "build": "vite build",
+    "dev": "concurrently -k \"npm run dev:renderer\" \"wait-on http://localhost:5173 && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 node ../../scripts/dev-electron.mjs .\"",
+    "dev:renderer": "vite",
+    "generate:database-fixture": "node tests/fixtures/generateCurrentElectronFixture.cjs"
+  },
+  "build": {
+    "appId": "com.ineedfull.mqtt-tool",
+    "productName": "Ineed MQTT Tool",
+    "electronVersion": "43.1.0",
+    "afterPack": "../../scripts/release-packaging.mjs",
+    "asar": false,
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "node_modules/**/*"
+    ],
+    "mac": {
+      "extendInfo": {
+        "CFBundleName": "Ineed MQTT Tool",
+        "CFBundleDisplayName": "iNeed MQTT Tool"
+      },
+      "icon": "build/icon.icns",
+      "target": "dmg",
+      "artifactName": "native-electron-${version}-${arch}.${ext}"
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "target": "nsis",
+      "artifactName": "native-electron-${version}-${arch}.${ext}"
+    },
+    "linux": {
+      "icon": "electron/assets/icon.png",
+      "target": [
+        "deb",
+        "AppImage"
+      ],
+      "artifactName": "${productName}-${version}-linux-${arch}.${ext}",
+      "category": "Development",
+      "maintainer": "Ineed",
+      "vendor": "Ineed",
+      "executableName": "ineed-mqtt-tool"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "deleteAppDataOnUninstall": false,
+      "installerLanguages": [
+        "zh_CN",
+        "en_US"
+      ],
+      "displayLanguageSelector": true,
+      "artifactName": "${productName}-${version}-windows-${arch}-setup.${ext}"
+    }
+  },
+  "dependencies": {
+    "@ineed-mqtt-tool/mqtt-contract": "*",
+    "@ineed-mqtt-tool/persistence-contract": "*",
+    "@ineed-mqtt-tool/runtime-contract": "*",
+    "@ineed-mqtt-tool/workbench": "*",
+    "electron-updater": "6.6.2",
+    "mqtt": "^5.15.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.6",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^43.1.0",
+    "electron-builder": "26.15.3",
+    "vite": "^8.0.0",
+    "wait-on": "^9.0.3"
+  },
+  "description": "MQTT development and debugging assistant",
+  "homepage": "https://www.ineedfull.com/"
+}

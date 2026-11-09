@@ -1,0 +1,83 @@
+/* Shared About layout for MQTT Tool and DevTool. Keep both copies aligned. */
+.mqtt-app .about-overlay {
+  --about-surface: var(--chrome-surface);
+  --about-muted-surface: var(--chrome-bg);
+  --about-text: var(--chrome-text);
+  --about-muted: var(--chrome-text-muted);
+  --about-border: var(--chrome-border);
+  --about-error: var(--error);
+  --about-accent: var(--accent);
+}
+.dialog-backdrop.about-overlay {
+  --about-surface: var(--surface);
+  --about-muted-surface: var(--surface-muted);
+  --about-text: var(--text);
+  --about-muted: var(--text-muted);
+  --about-border: var(--line);
+  --about-error: var(--danger);
+  --about-accent: var(--accent);
+}
+.modal-overlay.about-overlay, .dialog-backdrop.about-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: rgb(12 20 35 / 38%);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+.about-panel.desktop-about {
+  display: flex;
+  flex-direction: column;
+  width: min(480px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+  min-width: 0;
+  overflow: hidden;
+  color: var(--about-text);
+  background: var(--about-surface);
+  border: 1px solid var(--about-border);
+  border-radius: 10px;
+  box-shadow: 0 18px 48px rgb(20 28 32 / 24%);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.desktop-about > header, .desktop-about > footer {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--about-surface);
+}
+.desktop-about > header { min-height: 48px; justify-content: space-between; border-bottom: 1px solid var(--about-border); }
+.desktop-about > header h2 { margin: 0; color: var(--about-text); font-size: 15px; line-height: 1.5; }
+.desktop-about > footer { min-height: 56px; justify-content: flex-end; border-top: 1px solid var(--about-border); }
+.desktop-about .about-panel__body { display: grid; flex: 1 1 auto; min-height: 0; overflow: auto; overscroll-behavior: contain; gap: 20px; padding: 24px; }
+.desktop-about .about-panel__identity { display: flex; min-width: 0; align-items: center; gap: 16px; }
+.desktop-about .about-panel__icon { display: block; flex: 0 0 auto; width: 64px; height: 64px; }
+.desktop-about .about-panel__product { display: grid; min-width: 0; gap: 6px; }
+.desktop-about .about-panel__product strong { font-size: 20px; line-height: 1.3; overflow-wrap: anywhere; }
+.desktop-about .about-panel__product span { color: var(--about-muted); font-size: 12px; }
+.desktop-about .about-panel__details { display: grid; margin: 0; border-block: 1px solid var(--about-border); }
+.desktop-about .about-panel__details > div { display: flex; min-height: 42px; align-items: center; justify-content: space-between; gap: 20px; padding: 8px 0; }
+.desktop-about .about-panel__details > div + div { border-top: 1px solid var(--about-border); }
+.desktop-about .about-panel__details dt { flex: 0 0 auto; color: var(--about-muted); }
+.desktop-about .about-panel__details dd { display: block; margin: 0; text-align: right; font-weight: 500; overflow-wrap: anywhere; }
+.desktop-about .about-panel__runtime { text-transform: capitalize; }
+.desktop-about .about-panel__note { margin: 0; color: var(--about-muted); font-size: 12px; line-height: 1.8; }
+.desktop-about .about-panel__body small { color: var(--about-muted); font-size: 11px; }
+.desktop-about .about-panel__close { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; color: var(--about-muted); background: transparent; border: 0; border-radius: 5px; cursor: pointer; }
+.desktop-about .about-panel__button { min-width: 72px; min-height: 32px; padding: 5px 12px; color: var(--about-text); background: var(--about-surface); border: 1px solid var(--about-border); border-radius: 5px; font: inherit; font-size: 12px; cursor: pointer; }
+.desktop-about .about-panel__button:hover, .desktop-about .about-panel__close:hover { background: var(--about-muted-surface); }
+.desktop-about .about-panel__button:disabled { opacity: .55; cursor: default; }
+.desktop-about .about-panel__secondary-action { margin-right: auto; }
+.desktop-about .about-panel__update { min-width: 0; padding: 12px; border: 1px solid var(--about-border); border-radius: 6px; background: var(--about-muted-surface); overflow-wrap: anywhere; }
+.desktop-about .about-panel__update p { margin: 0; white-space: pre-wrap; }
+.desktop-about .about-panel__update > * + * { margin-top: 8px; }
+.desktop-about .about-panel__update--error { color: var(--about-error); }
+
+.desktop-about .about-panel__website { color: var(--about-accent); text-decoration: underline; text-underline-offset: 3px; }
+.desktop-about .about-panel__website:focus-visible { outline: 2px solid var(--about-accent); outline-offset: 3px; border-radius: 2px; }
+.desktop-about .about-panel__website-error { margin: 0; color: var(--about-error); overflow-wrap: anywhere; }
