@@ -17,12 +17,14 @@ async function readJson(relativePath) {
   return JSON.parse(await readFile(path.join(repoRoot, relativePath), 'utf8'));
 }
 
-async function listFiles(directory) {
+async function listFiles(directory, excludedDirectories = new Set()) {
   const entries = await readdir(directory, { withFileTypes: true });
-  const nested = await Promise.all(entries.map(async (entry) => {
-    const absolute = path.join(directory, entry.name);
-    return entry.isDirectory() ? listFiles(absolute) : [absolute];
-  }));
+  const nested = await Promise.all(entries
+    .filter(entry => !entry.isDirectory() || !excludedDirectories.has(entry.name))
+    .map(async (entry) => {
+      const absolute = path.join(directory, entry.name);
+      return entry.isDirectory() ? listFiles(absolute, excludedDirectories) : [absolute];
+    }));
   return nested.flat();
 }
 
@@ -75,7 +77,8 @@ test('native source trees do not contain copied renderer components or workbench
   ];
 
   for (const nativeRoot of nativeRoots) {
-    const files = (await listFiles(nativeRoot)).filter(file => !file.includes(`${path.sep}target${path.sep}`));
+    // Cargo mutates target while native smoke tests run. Exclude it before traversal.
+    const files = await listFiles(nativeRoot, new Set(['target']));
     assert.equal(files.some(file => file.endsWith('.vue')), false, `${nativeRoot} contains a Vue component`);
     assert.equal(files.some(file => file.endsWith('.css')), false, `${nativeRoot} contains renderer CSS`);
     for (const file of files.filter(file => /\.(?:cjs|js|rs|toml|json)$/.test(file))) {

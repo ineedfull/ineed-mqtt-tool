@@ -108,8 +108,8 @@ export function createSubscriptionLifecycle({ mqtt: mqttApi, db: dbApi, workspac
 
   function clearSubscriptionPending(sub) {
     const key = subscriptionPendingKey(sub);
-    const timer = subscriptionPendingTimers.get(key);
-    if (timer) clearTimeout(timer);
+    const pending = subscriptionPendingTimers.get(key);
+    if (pending) clearTimeout(pending.timer);
     subscriptionPendingTimers.delete(key);
   }
 
@@ -124,7 +124,7 @@ export function createSubscriptionLifecycle({ mqtt: mqttApi, db: dbApi, workspac
       sub.status = 'error';
       addLog('err', '订阅超时 ' + sub.topic, sub.connId);
     }, SUBSCRIBE_TIMEOUT_MS);
-    subscriptionPendingTimers.set(key, timer);
+    subscriptionPendingTimers.set(key, { timer, sub });
   }
 
   function finishSubscriptionPending(sub, ok) {
@@ -149,11 +149,40 @@ export function createSubscriptionLifecycle({ mqtt: mqttApi, db: dbApi, workspac
       connectionStatusTokens.set(connId, (connectionStatusTokens.get(connId) || 0) + 1);
     }
     connection.status = status;
+    if (status !== 'connected') {
+      // Include unsaved drafts waiting for ACK/database completion, so their
+      // deadlines cannot report a subscription timeout after a known loss.
+      const pending = [...subscriptionPendingTimers.values()].map(item => item.sub);
+      for (const sub of new Set([...workspace.getSubscriptions(), ...pending])) {
+        if (sub.connId !== connId) continue;
+        clearSubscriptionPending(sub);
+        sub.status = 'inactive';
+      }
+    }
   }
 
   function clearPendingTimers() {
-    subscriptionPendingTimers.forEach(timer => clearTimeout(timer));
+    subscriptionPendingTimers.forEach(({ timer }) => clearTimeout(timer));
     subscriptionPendingTimers.clear();
+  }
+
+  function captureSession(connId) {
+    const request = connectionRequestTokens.get(connId);
+    const status = connectionStatusTokens.get(connId);
+    return () => connectionRequestTokens.get(connId) === request
+      && connectionStatusTokens.get(connId) === status
+      && workspace.getConnection(connId)?.status === 'connected';
+  }
+
+  function finishForSession(sub, ok, current) {
+    finishSubscriptionPending(sub, ok);
+    if (!current()) sub.status = 'inactive';
+  }
+
+  async function retainCleanupIntent(connId, topic) {
+    await savePendingUnsubscriptions(connId, [...new Set([
+      ...(pendingUnsubscriptions.get(connId) || []), topic,
+    ])]);
   }
 
   /**
@@ -225,14 +254,17 @@ export function createSubscriptionLifecycle({ mqtt: mqttApi, db: dbApi, workspac
    * @param {Subscription} sub New row prepared by the Shell.
    * @param {number} operationToken Shell application generation.
    * @returns {Promise<boolean>} True after ACK, persistence and local insertion;
-   * false if unavailable/stale. Failure throws after attempted broker rollback.
+   * the retained row is inactive if the connection session changed while saving.
+   * False means unavailable/application-stale. Failure attempts compensation
+   * only on the captured session, or records cleanup for the next restoration.
    */
   function addSubscription(sub, operationToken) {
     return withSubscriptionConnectionLock(sub.connId, () => subscribeAndPersist(sub, operationToken));
   }
 
   async function subscribeAndPersist(sub, operationToken) {
-    if (!hasActiveConnection(sub?.connId)) return false;
+    if (!isOperationCurrent(operationToken) || !hasActiveConnection(sub?.connId)) return false;
+    const current = captureSession(sub.connId);
     markSubscriptionPending(sub);
     let brokerSubscribed = false;
     try {
@@ -240,33 +272,39 @@ export function createSubscriptionLifecycle({ mqtt: mqttApi, db: dbApi, workspac
       if (!isOperationCurrent(operationToken)) return false;
       requireSuccessfulResult(result, 'Broker 拒绝订阅');
       brokerSubscribed = true;
-      requireSuccessfulResult(await dbApi.addSubscription({ id: sub.id, connection_id: sub.connId, topic: sub.topic, qos: sub.qos, status: 'active', color: sub.color, format: sub.format }), '订阅保存失败');
+      // Persistence owns the retained filter, not a live-session certificate.
+      requireSuccessfulResult(await dbApi.addSubscription({ id: sub.id, connection_id: sub.connId, topic: sub.topic, qos: sub.qos, status: 'inactive', color: sub.color, format: sub.format }), '订阅保存失败');
       if (!isOperationCurrent(operationToken)) return false;
-      finishSubscriptionPending(sub, true);
-      workspace.getSubscriptions().push({ ...sub, status: 'active' });
-      addLog('debug', '订阅成功 ' + sub.topic, sub.connId);
+      finishForSession(sub, true, current);
+      workspace.getSubscriptions().push({ ...sub });
+      addLog('debug', (current() ? '订阅成功 ' : '订阅已保存，等待连接恢复 ') + sub.topic, sub.connId);
       return true;
     } catch (error) {
       let rollbackError = null;
       if (brokerSubscribed && isOperationCurrent(operationToken)) {
         try {
-          requireSuccessfulResult(
-            await mqttApi.unsubscribe(sub.connId, sub.topic),
-            'Broker 拒绝回滚订阅',
-          );
+          if (current()) {
+            requireSuccessfulResult(await mqttApi.unsubscribe(sub.connId, sub.topic), 'Broker 拒绝回滚订阅');
+          } else {
+            // The old durable broker session may retain the filter. Let the
+            // serialized reconnect cleanup reconcile it; never undo a new socket.
+            await retainCleanupIntent(sub.connId, sub.topic);
+          }
         } catch (caughtRollbackError) {
           rollbackError = caughtRollbackError;
           console.warn('[Vue] subscription rollback failed:', caughtRollbackError?.message || caughtRollbackError);
         }
       }
       if (!isOperationCurrent(operationToken)) return false;
-      finishSubscriptionPending(sub, false);
+      finishForSession(sub, false, current);
       const primaryMessage = error?.message || String(error);
       const failureMessage = rollbackError
         ? `${primaryMessage}；回滚失败: ${rollbackError?.message || rollbackError}`
         : primaryMessage;
       addLog('err', '订阅失败 ' + sub.topic + ': ' + failureMessage, sub.connId);
       throw new Error(failureMessage, { cause: error });
+    } finally {
+      clearSubscriptionPending(sub);
     }
   }
 
@@ -280,24 +318,27 @@ export function createSubscriptionLifecycle({ mqtt: mqttApi, db: dbApi, workspac
    */
   async function removeSubscription(sub, operationToken) {
     return withSubscriptionConnectionLock(sub.connId, async () => {
+      const current = captureSession(sub.connId);
       let brokerUnsubscribed = false;
       try {
         if (!isOperationCurrent(operationToken)) return false;
-        const online = workspace.getConnection(sub.connId)?.status === 'connected';
+        const online = current();
         const retained = workspace.getSubscriptions().filter(item => item.connId === sub.connId && item.id !== sub.id);
         if (online) {
           // Old installations may have saved covered filters without registering them.
           // Establish these paths at their own QoS before removing their broad path.
           for (const remaining of retained.filter(item => matchesTopic(item.topic, sub.topic))) {
+            if (!current()) break;
             requireSuccessfulResult(await mqttApi.subscribe(sub.connId, remaining.topic, remaining.qos), 'Broker 拒绝保留订阅');
             if (!isOperationCurrent(operationToken)) return false;
-            finishSubscriptionPending(remaining, true);
+            finishForSession(remaining, true, current);
           }
-          if (!retained.some(item => item.topic === sub.topic)) {
+          if (current() && !retained.some(item => item.topic === sub.topic)) {
             requireSuccessfulResult(await mqttApi.unsubscribe(sub.connId, sub.topic), 'Broker 拒绝取消订阅');
             brokerUnsubscribed = true;
           }
-        } else {
+        }
+        if (!current()) {
           // Persist intent first so a durable MQTT session can be cleaned after restart.
           const pending = [...new Set([...(pendingUnsubscriptions.get(sub.connId) || []), sub.topic])];
           await savePendingUnsubscriptions(sub.connId, pending);
@@ -310,13 +351,13 @@ export function createSubscriptionLifecycle({ mqtt: mqttApi, db: dbApi, workspac
         return true;
       } catch (error) {
         let rollbackError = null;
-        if (brokerUnsubscribed && isOperationCurrent(operationToken)) {
+        if (brokerUnsubscribed && isOperationCurrent(operationToken) && current()) {
           try {
             requireSuccessfulResult(await mqttApi.subscribe(sub.connId, sub.topic, sub.qos), 'Broker 拒绝恢复原订阅');
-            finishSubscriptionPending(sub, true);
+            finishForSession(sub, true, current);
           } catch (caughtRollbackError) {
             rollbackError = caughtRollbackError;
-            finishSubscriptionPending(sub, false);
+            finishForSession(sub, false, current);
           }
         }
         if (!isOperationCurrent(operationToken)) return false;
@@ -329,21 +370,23 @@ export function createSubscriptionLifecycle({ mqtt: mqttApi, db: dbApi, workspac
   }
 
   /**
-   * The Shell captures targetConnected and the existing row at issue time,
-   * before queueing. An online ACK precedes persistence/local update. Failure
-   * restores existing QoS or unsubscribes a newly added filter, then throws;
-   * generation invalidation resolves false without applying late results.
+   * Recheck the target session when its queued work starts. An online ACK
+   * precedes persistence/local update. A changed session keeps successful saved
+   * intent inactive. Failure compensates only the captured session, otherwise
+   * retains cleanup intent. Application invalidation resolves false.
    * @param {{source: Subscription, copied: Subscription, existing: Subscription|undefined,
-   *   target: object|undefined, targetConnected: boolean}} copy
+   *   target: object|undefined}} copy
    * @param {number} operationToken Shell application generation.
    * @returns {Promise<boolean>}
    */
-  async function copySubscription({ source, copied, existing, target, targetConnected }, operationToken) {
+  async function copySubscription({ source, copied, existing, target }, operationToken) {
     const targetConnId = copied.connId;
     return withSubscriptionConnectionLock(targetConnId, async () => {
+      if (!isOperationCurrent(operationToken) || !hasActiveConnection(targetConnId)) return false;
+      const current = captureSession(targetConnId);
       let brokerSubscribed = false;
       try {
-        if (targetConnected) {
+        if (current()) {
           requireSuccessfulResult(
             await mqttApi.subscribe(targetConnId, copied.topic, copied.qos),
             'Broker 拒绝订阅',
@@ -351,8 +394,9 @@ export function createSubscriptionLifecycle({ mqtt: mqttApi, db: dbApi, workspac
           if (!isOperationCurrent(operationToken)) return false;
           brokerSubscribed = true;
         }
-        requireSuccessfulResult(await dbApi.addSubscription({ id: copied.id, connection_id: copied.connId, topic: copied.topic, qos: copied.qos, status: copied.status, color: copied.color, format: copied.format }), '订阅保存失败');
+        requireSuccessfulResult(await dbApi.addSubscription({ id: copied.id, connection_id: copied.connId, topic: copied.topic, qos: copied.qos, status: 'inactive', color: copied.color, format: copied.format }), '订阅保存失败');
         if (!isOperationCurrent(operationToken)) return false;
+        finishForSession(copied, true, () => brokerSubscribed && current());
         if (existing) Object.assign(existing, copied);
         else workspace.getSubscriptions().push(copied);
         addLog('info', '已复制订阅 ' + source.topic + ' 到 ' + (target?.name || targetConnId), targetConnId);
@@ -361,12 +405,18 @@ export function createSubscriptionLifecycle({ mqtt: mqttApi, db: dbApi, workspac
         let rollbackError = null;
         if (brokerSubscribed && isOperationCurrent(operationToken)) {
           try {
-            const rollbackResult = existing
-              ? await mqttApi.subscribe(targetConnId, existing.topic, existing.qos)
-              : await mqttApi.unsubscribe(targetConnId, copied.topic);
-            requireSuccessfulResult(rollbackResult, 'Broker 拒绝回滚订阅');
+            if (current()) {
+              const rollbackResult = existing
+                ? await mqttApi.subscribe(targetConnId, existing.topic, existing.qos)
+                : await mqttApi.unsubscribe(targetConnId, copied.topic);
+              requireSuccessfulResult(rollbackResult, 'Broker 拒绝回滚订阅');
+              if (existing) finishForSession(existing, true, current);
+            } else {
+              await retainCleanupIntent(targetConnId, copied.topic);
+            }
           } catch (caughtRollbackError) {
             rollbackError = caughtRollbackError;
+            if (existing) finishForSession(existing, false, current);
             console.warn('[Vue] copy subscription rollback failed:', caughtRollbackError?.message || caughtRollbackError);
           }
         }

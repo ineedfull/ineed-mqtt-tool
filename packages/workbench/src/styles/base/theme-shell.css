@@ -1,0 +1,146 @@
+
+/* ============================================
+   MQTT Tool — Developer Tool Design System
+   Inspired by MQTTX, Postman, VS Code
+   ============================================ */
+
+/* ----- Theme: Light (default) ----- */
+:root,
+[data-theme="light"] {
+  --chrome-bg: #f3f4f6;
+  --chrome-bg-alt: #e8eaed;
+  --chrome-surface: #ffffff;
+  --chrome-border: #d9dce0;
+  --chrome-text: #1f1f1f;
+  --chrome-text-muted: #5f6368;
+  --chrome-hover: #e8eaed;
+  --chrome-active: #d3e3fd;
+
+  --terminal-bg: #1e1f2b;
+  --terminal-text: #d4d4d4;
+  --terminal-text-dim: #6a6d78;
+  --terminal-border: #2d2f3a;
+  --terminal-hover: #282a36;
+  --terminal-selected: #2a3a52;
+
+  --accent: #0e639c;
+  --accent-hover: #1177bb;
+  --accent-soft: #d3e3fd;
+  --success: #4ec9b0;
+  --success-soft: #1e3a32;
+  --warn: #cca700;
+  --warn-soft: #3d3400;
+  --error: #f44747;
+  --error-soft: #3d1f1f;
+
+  --topic-color: #569cd6;
+  --payload-color: #ce9178;
+  --time-color: #6a9955;
+  --qos-color: #9cdcfe;
+  --dir-in: #4ec9b0;
+  --dir-out: #569cd6;
+
+  --font-mono: "SF Mono", "Fira Code", "Cascadia Code", "JetBrains Mono", "Consolas", monospace;
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-lg: 8px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* ----- Theme: Dark ----- */
+[data-theme="dark"] {
+  --chrome-bg: #252830;
+  --chrome-bg-alt: #2c2f36;
+  --chrome-surface: #333640;
+  --chrome-border: #3e4048;
+  --chrome-text: #cccccc;
+  --chrome-text-muted: #888888;
+  --chrome-hover: #3a3d46;
+  --chrome-active: #264f78;
+
+  --terminal-bg: #1a1c23;
+  --terminal-text: #d4d4d4;
+  --terminal-text-dim: #5a5d68;
+  --terminal-border: #2d2f38;
+  --terminal-hover: #22242e;
+  --terminal-selected: #264f78;
+
+  --accent: #4daafc;
+  --accent-hover: #6bbdfe;
+  --accent-soft: #1e3a5f;
+  --success: #4ec9b0;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* ----- Reset ----- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #app {
+  width: 100%; height: 100%; margin: 0;
+  overflow: hidden;
+}
+
+body {
+  color: var(--chrome-text);
+  background: var(--chrome-bg);
+  font-family: var(--font-ui);
+  font-size: var(--font-size);
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+button { cursor: pointer; border: 0; background: none; padding: 0; color: inherit; }
+input, select, textarea { outline: none; }
+
+/* ----- App Shell ----- */
+.mqtt-app {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 1fr;
+  height: 100%;
+}
+.sidebar-collapsed {
+  grid-template-columns: 40px 1fr;
+}
+
+.workspace-state {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  padding: 24px;
+  color: var(--chrome-text-muted);
+  background: var(--chrome-bg);
+  text-align: center;
+}
+
+.mqtt-app > .workspace-state {
+  grid-column: 1 / -1;
+}
+
+.workspace-state strong {
+  color: var(--chrome-text);
+  font-size: var(--font-size-heading);
+}
+
+.workspace-state--error > span {
+  color: var(--error);
+}
+
+.workspace-state .modal__btn {
+  margin-top: 4px;
+}
+
+/* ============================================
+   LEFT PANEL
+   ============================================ */

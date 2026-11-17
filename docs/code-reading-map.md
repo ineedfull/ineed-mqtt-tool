@@ -24,7 +24,7 @@ native entries. Start with one operation, then follow its runtime branch.
    explain when an old connection result becomes invalid.
 4. On Electron, `apps/electron/renderer/runtimeAdapter.js` calls
    `apps/electron/electron/preload.cjs`, which invokes authorized IPC in
-   `apps/electron/electron/main.cjs`. The native MQTT runtime's `subscribe` and
+   `apps/electron/electron/ipcHandlers.cjs` (assembled by `main.cjs`). The native MQTT runtime's `subscribe` and
    `unsubscribe` resolve at their broker callbacks after grant/ACK handling.
    Database handlers call `apps/electron/electron/database.cjs` for subscription
    rows and settings writes.
@@ -46,7 +46,7 @@ the Shell's `runTrackedOperation`/`teardown` path.
 
 ## Receive and retain a message
 
-Electron's `main.cjs` batches native reception and calls
+Electron's `mqttCoordinator.cjs` batches native reception and calls
 `electron/receivedHistory.cjs` before delivering the batch to the renderer.
 Tauri's `mqtt.rs::AppHandleEventSink` calls
 `database.rs::save_received_messages` before emitting the display event. Both
@@ -113,6 +113,29 @@ configured Windows/Linux targets do not establish native acceptance.
 ## 时间显示
 
 时间 formatter、历史兼容与显示/存储边界见[时间显示规则](date-time-display.md)。新增界面时间先复用该入口。
+
+## 模块边界与状态归属（2026-11-17）
+
+Electron 的 `apps/electron/electron/main.cjs` 是组装入口，保留原有测试所用导出。
+`windowManager.cjs` 拥有主窗口/历史窗口与受信任页面集合；`closeLifecycle.cjs`
+拥有关闭握手、超时及幂等退出；`mqttCoordinator.cjs` 拥有连接事件与接收落盘协调。
+`ipcContract.cjs` 声明通道和参数边界，`ipcHandlers.cjs` 注册和校验调用；
+`updateCheck.cjs` 检查更新清单及外链，`smokeRuntime.cjs` 管理隔离启动标记。
+它们由入口注入依赖，不反向加载入口，也不重复注册生命周期监听。
+
+共享 Shell 继续拥有连接草稿、订阅、收发与应用资源。`components/ConnectionDialog.vue`、
+`SettingsDialog.vue`、`AboutDialog.vue` 只负责呈现、字段绑定和事件；设置丢弃确认与保存
+仍回到 Shell。`workspace/updateWorkflow.js` 拥有更新状态和单次准备任务，调用 Shell
+提供的准备函数；停止场景/定时发布、断连、刷新视图与持久化 flush 的顺序仍集中在该函数。
+旧异步结果继续使用 Shell 的 operation generation 校验。
+
+Tauri 的 `src-tauri/src/mqtt.rs` 保留会话、批次、ACK 与重连生命周期；`mqtt/config.rs`
+负责校验和连接选项构造，`mqtt/diagnostics.rs` 分类错误与重试决策。数据库连接与写入仍由
+`database.rs` 拥有，`database/schema.rs` 保留完整 SQLite 语义比较算法。两个 `tests.rs`
+为原有单元测试的外部模块，不编译进生产逻辑。
+
+`styles/base.css` 是有序入口，`styles/base/` 按主题/外壳、侧栏/弹窗、消息、发送、辅助/历史
+分段；全部仍在原来的 `legacy` layer 中。调整顺序会影响 cascade，应作为行为变更评估。
 
 ## 设备消息场景
 

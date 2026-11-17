@@ -1,7 +1,7 @@
 <script setup>
 import { computed, nextTick, onMounted, onUnmounted, ref, shallowRef, watch } from 'vue';
 import PayloadEditor from './PayloadEditor.vue';
-import { APP_VERSION, PRODUCT_NAME, PRODUCT_WEBSITE } from '../product.js';
+import { PRODUCT_WEBSITE } from '../product.js';
 import '../styles/about.css';
 import { ArrowRightLeft, CircleHelp, Copy, FileClock, MoreHorizontal, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Settings, X } from 'lucide-vue-next';
 import appIcon from '../assets/ineed-mqtt.svg';
@@ -45,18 +45,19 @@ import {
   incrementConnectionMessageCount,
   normalizeRuntimeConnection,
   normalizeSubscription,
-  protocolOptions,
   toDbConnection,
   validateConnectionDraft
 } from '@ineed-mqtt-tool/domain/connection-model';
 import { formatTimestamp } from '../workspace/timeFormat.js';
-import { formatStorageBytes, normalizeStorageStats } from '../workspace/storageStats.js';
+import { normalizeStorageStats } from '../workspace/storageStats.js';
 import { createRuntimeFacade } from '../workspace/runtimeFacade.js';
 import { getRuntimePresentation } from '../workspace/runtimePresentation.js';
 import { createSettingsPersistence } from '../workspace/settingsPersistence.js';
-import { validateHttpsUpdateUrl } from '../workspace/updateUrl.js';
+import { createUpdateWorkflow } from '../workspace/updateWorkflow.js';
 import { prepareUpdate } from '../workspace/prepareUpdate.js';
-import UpdateProgress from '../components/UpdateProgress.vue';
+import AboutDialog from '../components/AboutDialog.vue';
+import SettingsDialog from '../components/SettingsDialog.vue';
+import ConnectionDialog from '../components/ConnectionDialog.vue';
 import ScenarioPanel from '../components/ScenarioPanel.vue';
 import { createScenarioRepository } from '../workspace/scenarioRepository.js';
 import { createScenarioRunner } from '../workspace/scenarioRunner.js';
@@ -611,8 +612,8 @@ function doSubscribe() {
   subscriptionMutationError.value = '';
   return runTrackedOperation(async operationToken => {
     try {
-      await subscriptionLifecycle.addSubscription(sub, operationToken);
-      if (!isOperationCurrent(operationToken)) return false;
+      const saved = await subscriptionLifecycle.addSubscription(sub, operationToken);
+      if (!saved || !isOperationCurrent(operationToken)) return false;
       newSubTopic.value = '';
       showSubModal.value = false;
       return true;
@@ -681,12 +682,11 @@ function copySubscriptionToConnection() {
     messageCount: existing?.messageCount || 0,
     lastMessage: existing?.lastMessage || ''
   };
-  const targetConnected = target?.status === 'connected';
   subscriptionMutating.value = true;
   subscriptionMutationError.value = '';
   return runTrackedOperation(async operationToken => {
     try {
-      const saved = await subscriptionLifecycle.copySubscription({ source, copied, existing, target, targetConnected }, operationToken);
+      const saved = await subscriptionLifecycle.copySubscription({ source, copied, existing, target }, operationToken);
       if (!saved || !isOperationCurrent(operationToken)) return false;
       subToCopy.value = null;
       copySubTargetConnId.value = '';
@@ -823,100 +823,33 @@ function clearRealtimeMessages() {
   resetSubscriptionMessageCounts(subscriptions.value, activeConnId.value);
 }
 
-// ---- Version Check ----
-const checking = ref(false);
-const updateInfo = ref(null);
-const updateState = ref({ phase: 'idle', supported: false });
-const updateBusy = computed(() => ['checking', 'downloading', 'verifying', 'preparing', 'installing'].includes(updateState.value.phase));
+// Update state is independent; resource drain and persistence remain owned here.
+const updateWorkflow = createUpdateWorkflow({
+  runtimeFacade, closing, actionError, runTrackedOperation, isOperationCurrent,
+  getTeardown: () => teardownPromise,
+  prepareForInstall() {
+      scenarioRunner.stop();
+      stopPublishTimer();
+      return prepareUpdate({
+        drain: drainInFlightOperations,
+        disconnect: async signal => {
+          subscriptionLifecycle.clearPendingTimers();
+          await Promise.all(connections.value.map(async connection => {
+            const result = await mqttApi.disconnect(connection.id);
+            requireSuccessfulResult(result, '更新前断开 MQTT 失败');
+            signal.throwIfAborted();
+            connection.status = 'disconnected';
+          }));
+          // Let delivered native events enqueue their persistence work before flushing.
+          await nextTick();
+        },
+        writers: [settingsPersistence, messagePersistence, logPersistence],
+      });
+  },
+});
+const { checking, updateInfo, updateState, updateBusy, acceptUpdateState,
+  prepareForUpdate, runUpdateAction, checkUpdate, openUpdateDownload } = updateWorkflow;
 let disposeUpdateState = null;
-let updatePreparing = false;
-let updatePreparation = null;
-function acceptUpdateState(state) {
-  updateState.value = state;
-  if (state.phase === 'preparing') {
-    closing.value = true;
-    updatePreparing = true;
-  }
-  if (['available', 'ready', 'error'].includes(state.phase) && updatePreparing && !teardownPromise) {
-    closing.value = false;
-    updatePreparing = false;
-  }
-}
-async function prepareForUpdate() {
-  if (teardownPromise) throw new Error('应用正在关闭');
-  if (updatePreparation) return updatePreparation;
-  closing.value = true;
-  updatePreparing = true;
-  scenarioRunner.stop();
-  stopPublishTimer();
-  updatePreparation = prepareUpdate({
-    drain: drainInFlightOperations,
-    disconnect: async signal => {
-      subscriptionLifecycle.clearPendingTimers();
-      await Promise.all(connections.value.map(async connection => {
-        const result = await mqttApi.disconnect(connection.id);
-        requireSuccessfulResult(result, '更新前断开 MQTT 失败');
-        signal.throwIfAborted();
-        connection.status = 'disconnected';
-      }));
-      // Let delivered native events enqueue their persistence work before flushing.
-      await nextTick();
-    },
-    writers: [settingsPersistence, messagePersistence, logPersistence],
-  }).catch(error => {
-    closing.value = false;
-    updatePreparing = false;
-    throw error;
-  }).finally(() => { updatePreparation = null; });
-  return updatePreparation;
-}
-async function runUpdateAction(method) {
-  try { await runtimeFacade.update[method](); }
-  catch (error) {
-    updateState.value = { ...updateState.value, error: error.message };
-    if (method === 'install' && !teardownPromise) { closing.value = false; updatePreparing = false; }
-  }
-}
-async function checkUpdate() {
-  if (closing.value || checking.value || updateBusy.value) return false;
-  checking.value = true; updateInfo.value = null;
-  return runTrackedOperation(async operationToken => {
-    try {
-      const data = await runtimeFacade.update.check();
-      if (!isOperationCurrent(operationToken)) return false;
-      updateInfo.value = data;
-      return true;
-    } catch(e) {
-      if (isOperationCurrent(operationToken)) updateInfo.value = { error: e.message };
-      return false;
-    } finally {
-      if (isOperationCurrent(operationToken)) checking.value = false;
-    }
-  });
-}
-
-async function openUpdateDownload() {
-  if (closing.value) return false;
-  if (updateInfo.value?.automatic) {
-    await runUpdateAction('download');
-    return true;
-  }
-  const url = validateHttpsUpdateUrl(updateInfo.value?.url);
-  if (!url) {
-    actionError.value = '更新下载地址无效';
-    return false;
-  }
-  actionError.value = '';
-  return runTrackedOperation(async operationToken => {
-    try {
-      await runtimeFacade.window.openExternal(url);
-      return isOperationCurrent(operationToken);
-    } catch (error) {
-      if (isOperationCurrent(operationToken)) actionError.value = error?.message || String(error);
-      return false;
-    }
-  });
-}
 
 // ---- Delete Confirmation ----
 const showSubModal = ref(false);
@@ -1044,12 +977,6 @@ async function stopMqttConnection(connId = activeConnId.value) {
       requireSuccessfulResult(await mqttApi.disconnect(connId), 'Broker 断开连接失败');
       if (!isOperationCurrent(operationToken) || !subscriptionLifecycle.isConnectionRequestCurrent(connId, requestToken)) return false;
       updateConnStatus(connId, 'disconnected');
-      subscriptions.value.forEach(s => {
-        if (s.connId === connId) {
-          subscriptionLifecycle.clearSubscriptionPending(s);
-          s.status = 'inactive';
-        }
-      });
       return true;
     } catch (error) {
       if (isOperationCurrent(operationToken) && subscriptionLifecycle.isConnectionRequestCurrent(connId, requestToken)) {
@@ -1326,7 +1253,7 @@ onMounted(() => {
 
 function processIncomingMessages(batch) {
   scenarioRunner.acceptMessages(batch);
-  if (closing.value && !updatePreparing) return;
+  if (closing.value && !updateWorkflow.isPreparing()) return;
   const incoming = Array.isArray(batch) ? batch : [batch];
   const realtimeMessages = [];
   const receiveLogs = [];
@@ -1681,107 +1608,41 @@ function processIncomingMessages(batch) {
       </template>
     </main>
 
-    <div v-if="aboutOpen" class="modal-overlay about-overlay" @click.self="aboutOpen = false">
-      <section v-modal="{ close: () => { aboutOpen = false; } }" class="about-panel desktop-about" role="dialog" aria-modal="true" aria-labelledby="mqtt-about-title">
-        <header>
-          <h2 id="mqtt-about-title">关于</h2>
-          <button tabindex="0" type="button" class="about-panel__close" aria-label="关闭关于" title="关闭" @click="aboutOpen = false"><X :size="18" aria-hidden="true" /></button>
-        </header>
-        <div class="about-panel__body" tabindex="0" role="region" aria-label="产品信息">
-          <div class="about-panel__identity">
-            <img :src="appIcon" class="about-panel__icon" alt="" width="64" height="64">
-            <div class="about-panel__product"><strong>{{ PRODUCT_NAME }}</strong><span>开发与调试小助手</span></div>
-          </div>
-          <dl class="about-panel__details">
-            <div><dt>版本</dt><dd>{{ APP_VERSION }}</dd></div>
-            <div><dt>运行环境</dt><dd class="about-panel__runtime">{{ runtimePresentation.runtimeLabel }}</dd></div>
-            <div><dt>支持协议</dt><dd>MQTT 3.1.1 / 5.0</dd></div>
-            <div><dt>本地存储</dt><dd>SQLite</dd></div>
-            <div><dt>官方网站</dt><dd><a tabindex="0" class="about-panel__website" :href="PRODUCT_WEBSITE" target="_blank" rel="noopener noreferrer" @click="openWebsite">mqtt.ineedfull.com</a></dd></div>
-          </dl>
-          <p v-if="websiteError" class="about-panel__website-error" role="alert">{{ websiteError }}</p>
-          <p class="about-panel__note">{{ runtimePresentation.buildLine }}<br>{{ runtimePresentation.mqttLine }}</p>
-          <div v-if="updateInfo" class="about-panel__update" :class="{ 'about-panel__update--error': updateInfo.error }" :role="updateInfo.error ? 'alert' : 'status'" aria-live="polite">
-            <p v-if="updateInfo.error">检测失败: {{ updateInfo.error }}</p>
-            <template v-else-if="updateInfo.available">
-              <strong>发现新版本 {{ updateInfo.version }}</strong>
-              <p>{{ updateInfo.description }}</p>
-              <button tabindex="0" v-if="(updateInfo.url || updateInfo.automatic) && !['ready', 'preparing', 'installing'].includes(updateState.phase)" type="button" class="about-panel__button update-download" :disabled="closing || updateBusy" @click="openUpdateDownload">{{ updateInfo.automatic ? '下载更新' : '下载' }}</button>
-              <span v-if="updateInfo.force">（强制更新）</span>
-            </template>
-            <p v-else>已是最新版本</p>
-          </div>
-          <UpdateProgress :state="updateState" @install="runUpdateAction('install')" @cancel="runUpdateAction('cancel')" />
-          <small>版权所有 © 2026 Ineed</small>
-        </div>
-        <footer>
-          <button tabindex="0" type="button" class="about-panel__button about-panel__secondary-action" :disabled="closing || checking || updateBusy" @click="checkUpdate">{{ checking ? '检测中...' : '检查更新' }}</button>
-          <button tabindex="0" type="button" class="about-panel__button" @click="aboutOpen = false">关闭</button>
-        </footer>
-      </section>
-    </div>
+    <AboutDialog
+      v-if="aboutOpen"
+      :runtime-presentation="runtimePresentation"
+      :website-error="websiteError"
+      :update-info="updateInfo"
+      :update-state="updateState"
+      :closing="closing"
+      :update-busy="updateBusy"
+      :checking="checking"
+      @close="aboutOpen = false"
+      @open-website="openWebsite"
+      @check-update="checkUpdate"
+      @download-update="openUpdateDownload"
+      @update-action="runUpdateAction"
+    />
 
-    <div v-if="settingsOpen" class="modal-overlay" @click.self="closeSettings()">
-      <form v-modal="{ close: closeSettings, busy: settingsSaving || storageClearing }" class="modal settings-dialog" role="dialog" aria-modal="true" aria-labelledby="mqtt-settings-title" @submit.prevent="saveSettings">
-        <header class="modal__header"><h3 id="mqtt-settings-title">设置</h3><button type="button" class="modal__close" aria-label="关闭设置" :disabled="settingsSaving || storageClearing" @click="closeSettings()">×</button></header>
-      <!-- ===== Tab: Settings ===== -->
-      <div class="settings-area">
-      <fieldset class="settings-fields" :disabled="settingsSaving || storageClearing || closing">
-        <div v-if="settingsError" class="settings-error" role="alert">{{ settingsError }}</div>
-        <div class="settings-group">
-          <div class="settings-group__title">外观</div>
-          <div class="settings-row"><label for="mqtt-theme">主题</label><select id="mqtt-theme" v-model="draftTheme"><option value="system">跟随系统</option><option value="light">浅色</option><option value="dark">深色</option></select></div>
-          <div class="settings-row"><label for="mqtt-density">显示密度</label><select id="mqtt-density" v-model="draftDensity"><option value="comfortable">舒适</option><option value="compact">紧凑</option></select></div>
-          <div class="settings-row"><div><div class="settings-row__label">大字模式</div><div class="settings-row__desc">增大界面字号，适合演示或大屏</div></div><button type="button" role="switch" aria-label="大字模式" :aria-checked="settingsDraft.largeFont" :class="['toggle', { 'toggle--on': settingsDraft.largeFont }]" @click="settingsDraft.largeFont = !settingsDraft.largeFont" /></div>
-        </div>
-        <div class="settings-group">
-          <div class="settings-group__title">日志与显示</div>
-          <div class="settings-row"><div><div class="settings-row__label">日志级别</div><div class="settings-row__desc">低于此级别的日志将不显示</div></div><select aria-label="日志级别" v-model="settingsDraft.logLevel"><option value="debug">Debug - 所有</option><option value="info">Info - 常规</option><option value="warn">Warn - 警告</option><option value="error">Error - 错误</option></select></div>
-          <div class="settings-row"><div><div class="settings-row__label">实时消息条目</div><div class="settings-row__desc">消息超过上限时自动保留最新内容</div></div><input aria-label="实时消息条目" v-model.number="settingsDraft.maxRealtimeMessages" type="number" min="100" max="50000" step="100" style="width:120px;"></div>
-          <div class="settings-row"><div><div class="settings-row__label">实时日志条目</div><div class="settings-row__desc">日志超过上限时自动保留最新内容</div></div><input aria-label="实时日志条目" v-model.number="settingsDraft.maxLogEntries" type="number" min="100" max="50000" step="100" style="width:120px;"></div>
-          <div class="settings-row"><div><div class="settings-row__label">收包日志入库</div><div class="settings-row__desc">高频订阅时建议关闭，历史消息仍会保存</div></div><button type="button" role="switch" aria-label="收包日志入库" :aria-checked="settingsDraft.persistReceiveLogs" :class="['toggle', { 'toggle--on': settingsDraft.persistReceiveLogs }]" @click="settingsDraft.persistReceiveLogs = !settingsDraft.persistReceiveLogs" /></div>
-          <div class="settings-row"><div><div class="settings-row__label">接收 JSON 格式化</div><div class="settings-row__desc">按订阅格式展示 JSON，小内容自动缩进</div></div><button type="button" role="switch" aria-label="接收 JSON 格式化" :aria-checked="settingsDraft.autoFormatReceivedJson" :class="['toggle', { 'toggle--on': settingsDraft.autoFormatReceivedJson }]" @click="settingsDraft.autoFormatReceivedJson = !settingsDraft.autoFormatReceivedJson" /></div>
-          <div class="settings-row"><div><div class="settings-row__label">格式化上限</div><div class="settings-row__desc">超过该字节数时跳过 JSON 自动格式化</div></div><input aria-label="格式化上限" v-model.number="settingsDraft.maxAutoFormatPayloadBytes" type="number" min="1024" max="1048576" step="1024" style="width:120px;"></div>
-          <div class="settings-row"><div><div class="settings-row__label">Payload 格式化</div><div class="settings-row__desc">消息内容的自动格式化方式</div></div><select aria-label="Payload 格式化" v-model="settingsDraft.payloadFormat"><option value="auto">自动检测</option><option value="json">JSON</option><option value="text">纯文本</option><option value="hex">Hex</option></select></div>
-          <div class="settings-row"><div><div class="settings-row__label">时间戳格式</div><div class="settings-row__desc">本机时区 · YYYY-MM-DD HH:mm:ss.SSS；实时列表显示时分秒和毫秒，悬停或详情查看完整日期</div></div></div>
-          <div class="settings-row"><div><div class="settings-row__label">自动滚动</div><div class="settings-row__desc">新消息到达时自动滚到底部</div></div><button type="button" role="switch" aria-label="自动滚动" :aria-checked="settingsDraft.autoScroll" :class="['toggle', { 'toggle--on': settingsDraft.autoScroll }]" @click="settingsDraft.autoScroll = !settingsDraft.autoScroll" /></div>
-        </div>
-        <div class="settings-group">
-          <div class="settings-group__title">连接默认值</div>
-          <div class="settings-row"><div><div class="settings-row__label">Keep Alive (秒)</div><div class="settings-row__desc">心跳间隔，新建连接时的默认值</div></div><input aria-label="Keep Alive (秒)" v-model.number="settingsDraft.keepalive" type="number" style="width:80px;"></div>
-          <div class="settings-row"><div><div class="settings-row__label">默认 QoS</div><div class="settings-row__desc">新建订阅和发布时的默认质量等级</div></div><select aria-label="默认 QoS" v-model.number="settingsDraft.defaultQos"><option :value="0">0 - 最多一次</option><option :value="1">1 - 至少一次</option><option :value="2">2 - 仅一次</option></select></div>
-          <div class="settings-row"><div><div class="settings-row__label">Clean Session</div><div class="settings-row__desc">断开时是否清除服务端会话状态</div></div><select aria-label="Clean Session" v-model.number="settingsDraft.cleanSession"><option :value="true">是</option><option :value="false">否</option></select></div>
-          <div class="settings-row"><div><div class="settings-row__label">自动重连</div><div class="settings-row__desc">连接断开后自动尝试重新连接</div></div><button type="button" role="switch" aria-label="自动重连" :aria-checked="settingsDraft.autoReconnect" :class="['toggle', { 'toggle--on': settingsDraft.autoReconnect }]" @click="settingsDraft.autoReconnect = !settingsDraft.autoReconnect" /></div>
-        </div>
-        <div class="settings-group">
-          <div class="settings-group__title settings-group__title--actions">
-            <span>数据存储</span>
-            <button type="button" class="storage-refresh" :disabled="closing || storageLoading || storageClearing" title="刷新存储统计" @click="refreshStorageStats">↻</button>
-          </div>
-          <div class="storage-stats" :class="{ 'storage-stats--loading': storageLoading }">
-            <div><span>历史消息</span><strong>{{ storageStats.messageCount.toLocaleString() }}</strong></div>
-            <div><span>历史日志</span><strong>{{ storageStats.logCount.toLocaleString() }}</strong></div>
-            <div><span>发布历史</span><strong>{{ storageStats.publishCount.toLocaleString() }}</strong></div>
-            <div><span>合计记录</span><strong>{{ storageStats.totalCount.toLocaleString() }}</strong></div>
-          </div>
-          <div class="storage-footprint">
-            <div>
-              <span>实际磁盘占用</span>
-              <strong>{{ formatStorageBytes(storageStats.totalBytes) }}</strong>
-              <small>数据库 {{ formatStorageBytes(storageStats.databaseBytes) }} · WAL {{ formatStorageBytes(storageStats.walBytes) }} · SHM {{ formatStorageBytes(storageStats.shmBytes) }}</small>
-            </div>
-            <button type="button" class="modal__btn modal__btn--danger" :disabled="closing || storageLoading || storageClearing" @click="clearHistoryStorage">{{ storageClearing ? '清理中...' : '清空历史数据' }}</button>
-          </div>
-          <div v-if="storageError" class="storage-error">{{ storageError }}</div>
-          <div class="storage-note">只清理历史消息、历史日志和发布历史，不会删除连接、订阅和系统设置。</div>
-        </div>
-      </fieldset>
-      </div>
-
-        <div v-if="settingsDiscard" class="settings-discard" role="alert"><span>设置尚未保存。</span><button type="button" @click="settingsDiscard = false">继续编辑</button><button type="button" @click="closeSettings(true)">放弃修改</button></div>
-        <footer class="modal__footer"><button type="button" class="modal__btn" :disabled="settingsSaving || storageClearing" @click="closeSettings()">取消</button><button type="submit" class="modal__btn modal__btn--primary" :disabled="settingsSaving || !settingsDirty">{{ settingsSaving ? '保存中…' : '保存' }}</button></footer>
-      </form>
-    </div>
+    <SettingsDialog
+      v-if="settingsOpen"
+      v-model:draft="settingsDraft"
+      v-model:theme="draftTheme"
+      v-model:density="draftDensity"
+      v-model:discard="settingsDiscard"
+      :settings-saving="settingsSaving"
+      :storage-clearing="storageClearing"
+      :closing="closing"
+      :settings-error="settingsError"
+      :settings-dirty="settingsDirty"
+      :storage-loading="storageLoading"
+      :storage-stats="storageStats"
+      :storage-error="storageError"
+      @close="closeSettings"
+      @save="saveSettings"
+      @refresh-storage="refreshStorageStats"
+      @clear-history="clearHistoryStorage"
+    />
     <aside v-if="selectedMessage" class="message-inspector" aria-label="消息详情">
       <header><strong>消息详情</strong><button class="message-inspector__close" aria-label="关闭消息详情" @click="closeInspector">×</button></header>
       <dl><dt>时间</dt><dd>{{ selectedMessage.time }}</dd><dt>方向</dt><dd>{{ selectedMessage.direction === 'in' ? '接收 RX' : '发送 TX' }}</dd><dt>主题</dt><dd>{{ selectedMessage.topic }}</dd><dt>QoS</dt><dd>{{ selectedMessage.qos }}</dd><dt>Retain</dt><dd>{{ selectedMessage.retained ? '是' : '否' }}</dd><dt>订阅</dt><dd>{{ describeMessageSubscription(selectedMessage) || '—' }}</dd></dl>
@@ -1869,71 +1730,24 @@ function processIncomingMessages(batch) {
     </div>
 
     <!-- ===== New Connection Modal ===== -->
-    <div v-if="showNewConn" class="modal-overlay" @click.self="closeModalIfNotDragged(() => { if (!connectionSaving) { showNewConn = false; resetModalPos() } })">
-      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="connection-dialog-title" v-modal="{ close: () => { showNewConn = false; resetModalPos(); }, busy: connectionSaving }" :style="{ transform: 'translate(' + modalPos.x + 'px,' + modalPos.y + 'px)' }">
-        <div class="modal__header" @mousedown="startModalDrag">
-          <h3 id="connection-dialog-title">{{ modalTitle }}</h3>
-          <button class="modal__close" aria-label="关闭连接对话框" @click="!connectionSaving && (showNewConn = false)">×</button>
-        </div>
-        <div class="modal__body">
-          <div class="modal__field">
-            <label>连接名称 <span class="modal__required">*</span></label>
-            <input aria-label="连接名称" v-focus v-model="newConn.name" :disabled="connectionSaving" :class="{ 'modal__input--err': connErrors.name }" placeholder="例如：本地开发 Broker" @keyup.enter="saveConnection" @blur="validate('name')" @input="connErrors.name = ''">
-            <span v-if="connErrors.name" class="modal__err">{{ connErrors.name }}</span>
-            <span v-if="connectionSaveError" class="modal__err" role="alert">{{ connectionSaveError }}</span>
-          </div>
-          <div class="modal__row">
-            <div class="modal__field" style="width:115px;flex-shrink:0;">
-              <label>协议</label>
-              <select :disabled="connectionSaving" aria-label="协议" v-model="newConn.protocol" @change="onProtocolChange">
-                <option v-for="p in protocolOptions" :key="p" :value="p">{{ p }}</option>
-              </select>
-            </div>
-            <div class="modal__field" style="flex:1;">
-              <label>主机地址 <span class="modal__required">*</span></label>
-              <input :disabled="connectionSaving" aria-label="主机地址" v-model="newConn.host" :class="{ 'modal__input--err': connErrors.host }" placeholder="localhost" @blur="validate('host')" @input="connErrors.host = ''">
-              <span v-if="connErrors.host" class="modal__err">{{ connErrors.host }}</span>
-            </div>
-            <div class="modal__field" style="width:100px;flex-shrink:0;">
-              <label>端口 <span class="modal__required">*</span></label>
-              <input :disabled="connectionSaving" aria-label="端口" v-model.number="newConn.port" :class="{ 'modal__input--err': connErrors.port }" type="number" placeholder="1883" @blur="validate('port')" @input="connErrors.port = ''">
-              <span v-if="connErrors.port" class="modal__err">{{ connErrors.port }}</span>
-            </div>
-          </div>
-          <div v-if="['ws://', 'wss://'].includes(newConn.protocol)" class="modal__field">
-            <label for="connection-ws-path">WebSocket 路径</label>
-            <input id="connection-ws-path" aria-label="WebSocket 路径" v-model="newConn.path" :disabled="connectionSaving" :class="{ 'modal__input--err': connErrors.path }" placeholder="/mqtt（留空使用此路径）" @blur="validate('path')" @input="connErrors.path = ''">
-            <span v-if="connErrors.path" class="modal__err">{{ connErrors.path }}</span>
-          </div>
-          <div class="modal__row">
-            <div class="modal__field" style="flex:1;">
-              <label>Client ID</label>
-              <input :disabled="connectionSaving" aria-label="Client ID" v-model="newConn.clientId" placeholder="自动生成">
-            </div>
-            <div class="modal__field" style="flex:1;">
-              <label>用户名</label>
-              <input :disabled="connectionSaving" aria-label="用户名" v-model="newConn.username" placeholder="选填">
-            </div>
-            <div class="modal__field" style="flex:1;">
-              <label>密码</label>
-              <input :disabled="connectionSaving" aria-label="密码" v-model="newConn.password" type="password" placeholder="选填">
-            </div>
-          </div>
-          <div class="modal__row">
-            <div class="modal__field" style="flex:0 0 160px;">
-              <label>Keep Alive (秒)</label>
-              <input :disabled="connectionSaving" aria-label="Keep Alive (秒)" v-model.number="newConn.keepalive" :class="{ 'modal__input--err': connErrors.keepalive }" type="number" min="10" max="3600" placeholder="60" @blur="validate('keepalive')" @input="connErrors.keepalive = ''">
-              <span v-if="connErrors.keepalive" class="modal__err">{{ connErrors.keepalive }}</span>
-            </div>
-            <div class="modal__field" style="flex:1;" />
-          </div>
-        </div>
-        <div class="modal__footer">
-          <button class="modal__btn modal__btn--cancel" :disabled="connectionSaving" @click="!connectionSaving && (showNewConn = false)">取消</button>
-          <button class="modal__btn modal__btn--primary" :disabled="connectionSaving" @click="saveConnection">{{ connectionSaving ? '保存中...' : (editingConnId ? '保存' : '创建连接') }}</button>
-        </div>
-      </div>
-    </div>    <!-- ===== Delete Subscription Modal ===== -->
+    <ConnectionDialog
+      v-if="showNewConn"
+      v-model:draft="newConn"
+      v-model:errors="connErrors"
+      :connection-saving="connectionSaving"
+      :modal-pos="modalPos"
+      :modal-title="modalTitle"
+      :connection-save-error="connectionSaveError"
+      :editing-conn-id="editingConnId"
+      @outside-click="closeModalIfNotDragged(() => { if (!connectionSaving) { showNewConn = false; resetModalPos() } })"
+      @close="showNewConn = false"
+      @close-and-reset="showNewConn = false; resetModalPos()"
+      @drag-start="startModalDrag"
+      @save="saveConnection"
+      @validate="validate"
+      @protocol-change="onProtocolChange"
+    />
+    <!-- ===== Delete Subscription Modal ===== -->
     <div v-if="subToDel" class="modal-overlay" @click.self="closeModalIfNotDragged(() => { if (!subscriptionMutating) { subToDel = null; resetModalPos() } })">
       <div class="modal" role="dialog" aria-modal="true" aria-labelledby="remove-subscription-dialog-title" v-modal="{ close: () => { subToDel = null; resetModalPos(); }, busy: subscriptionMutating }" style="width:400px;" :style="{ transform: 'translate(' + modalPos.x + 'px,' + modalPos.y + 'px)' }">
         <div class="modal__header" @mousedown="startModalDrag">

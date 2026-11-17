@@ -7,7 +7,7 @@ const shellSource = await readFile(
   'utf8',
 );
 const cssSource = await readFile(
-  new URL('../src/styles/base.css', import.meta.url),
+  new URL('../src/styles/base/publishing.css', import.meta.url),
   'utf8',
 );
 

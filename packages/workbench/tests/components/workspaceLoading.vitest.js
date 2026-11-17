@@ -44,7 +44,7 @@ function mountShell(adapter) {
   return shallowMount(MqttToolShell, {
     global: {
       provide: { [runtimeAdapterKey]: adapter },
-      stubs: { PayloadEditor: true },
+      stubs: { PayloadEditor: true, ConnectionDialog: false },
     },
   });
 }

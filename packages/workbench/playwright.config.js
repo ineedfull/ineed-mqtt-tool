@@ -22,6 +22,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
+      metadata: { runtime: 'electron' },
       use: { ...devices['Desktop Chrome'], channel: 'chromium' },
     },
   ],

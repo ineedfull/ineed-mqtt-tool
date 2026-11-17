@@ -205,7 +205,7 @@ async function mountShell(runtime, options = {}) {
     attachTo: options.attachTo ? globalThis.document.body : undefined,
     global: {
       provide: { [runtimeAdapterKey]: runtime.adapter },
-      stubs: { PayloadEditor: true },
+      stubs: { PayloadEditor: true, AboutDialog: false, SettingsDialog: false, ConnectionDialog: false },
     },
   });
   await flushPromises();
@@ -1323,6 +1323,7 @@ describe('MqttToolShell mounted workflows', () => {
     runtime.setAddSubscription(() => persisted.promise);
     runtime.setUnsubscribe(async () => ({ ok: false, error: 'subscription rollback denied' }));
     const wrapper = await mountShell(runtime);
+    runtime.emitStatus({ connId: 'connection-1', status: 'connected' });
 
     await wrapper.get('[title="添加订阅"]').trigger('click');
     await wrapper.get('[placeholder="例如：device/sensor/#"]').setValue('devices/+/status');
@@ -1350,6 +1351,45 @@ describe('MqttToolShell mounted workflows', () => {
     expect(wrapper.find('.sub-item').exists()).toBe(false);
     expect(wrapper.get('.modal [role="alert"]').text()).toContain('subscription disk unavailable');
     expect(wrapper.get('.modal [role="alert"]').text()).toContain('subscription rollback denied');
+    wrapper.unmount();
+  });
+
+  it('shows late persisted subscriptions as inactive after a native disconnect event', async () => {
+    const runtime = createFakeRuntime();
+    const saved = Promise.withResolvers();
+    runtime.setAddSubscription(() => saved.promise);
+    const wrapper = await mountShell(runtime);
+    runtime.emitStatus({ connId: 'connection-1', status: 'connected' });
+    await wrapper.get('[title="添加订阅"]').trigger('click');
+    await wrapper.get('[placeholder="例如：device/sensor/#"]').setValue('devices/+/status');
+    await findButton(wrapper, '确认订阅').trigger('click');
+    await flushPromises();
+    expect(runtime.calls.filter(call => call[0] === 'subscription.add')).toHaveLength(1);
+    runtime.emitStatus({ connId: 'connection-1', status: 'disconnected' });
+    saved.resolve({ ok: true });
+    await flushPromises();
+    expect(wrapper.find('.modal').exists()).toBe(false);
+    expect(wrapper.get('.sub-item__topic').text()).toBe('devices/+/status');
+    expect(wrapper.get('.sub-item__dot').attributes('aria-label')).toBe('未订阅');
+    wrapper.unmount();
+  });
+
+  it('clears active subscription status on automatic disconnect and waits for the reconnect ACK', async () => {
+    const runtime = createFakeRuntime({ subscriptions: [subscription()] });
+    const wrapper = await mountShell(runtime);
+    await connect(wrapper);
+    expect(wrapper.get('.sub-item__dot').attributes('aria-label')).toBe('已订阅');
+    runtime.emitStatus({ connId: 'connection-1', status: 'reconnecting' });
+    await flushPromises();
+    expect(wrapper.get('.sub-item__dot').attributes('aria-label')).toBe('未订阅');
+    const ack = Promise.withResolvers();
+    runtime.setSubscribe(() => ack.promise);
+    runtime.emitStatus({ connId: 'connection-1', status: 'connected', reconnected: true });
+    await flushPromises();
+    expect(wrapper.get('.sub-item__dot').attributes('aria-label')).toBe('订阅中');
+    ack.resolve({ ok: true });
+    await flushPromises();
+    expect(wrapper.get('.sub-item__dot').attributes('aria-label')).toBe('已订阅');
     wrapper.unmount();
   });
 
