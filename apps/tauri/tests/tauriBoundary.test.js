@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 const TAURI_DIR = join(TEST_DIR, '..', 'src-tauri');
 const SOURCE_DIR = join(TAURI_DIR, 'src');
+const { version: productVersion } = JSON.parse(await readFile(join(TEST_DIR, '../../..', 'package.json'), 'utf8'));
 
 const DATABASE_COMMANDS = [
   'db_get_connections',
@@ -194,7 +195,7 @@ test('Tauri configuration fixes the product identity, renderer boundary, and win
 
   assert.equal(config.productName, 'Ineed MQTT Tool');
   assert.equal(config.identifier, 'com.ineedfull.mqtt-tool');
-  assert.equal(config.version, '0.1.0');
+  assert.equal(config.version, productVersion);
   assert.equal(config.build.frontendDist, '../dist');
   assert.equal(config.app.withGlobalTauri, false);
   assert.equal(config.app.security.csp, null);
@@ -239,7 +240,7 @@ test('Rust package, launcher, build script, and icons form a self-contained Taur
   const manifest = parseCargoSections(manifestSource);
 
   assert.equal(manifest.get('package').get('name'), '"ineed-mqtt-tool"');
-  assert.equal(manifest.get('package').get('version'), '"0.1.0"');
+  assert.equal(manifest.get('package').get('version'), JSON.stringify(productVersion));
   assert.equal(manifest.get('package').get('edition'), '"2021"');
   assert.equal(manifest.get('package').get('default-run'), '"ineed-mqtt-tool"');
   assert.equal(manifest.get('lib').get('name'), '"ineed_mqtt_tool_lib"');

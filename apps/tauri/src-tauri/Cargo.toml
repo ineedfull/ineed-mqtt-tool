@@ -1,6 +1,6 @@
 [package]
 name = "ineed-mqtt-tool"
-version = "0.1.0"
+version = "0.1.1"
 description = "Ineed MQTT Tool desktop shell"
 authors = ["Ineed"]
 edition = "2021"

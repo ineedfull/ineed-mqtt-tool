@@ -3,6 +3,7 @@ import { createRequire } from 'node:module';
 import test from 'node:test';
 
 const require = createRequire(import.meta.url);
+const { version: installedVersion } = require('../../../package.json');
 const {
   DB_HANDLERS,
   checkForUpdates,
@@ -196,7 +197,7 @@ test('update check returns a normalized unavailable result', async () => {
     }),
   }), {
     available: false,
-    version: '0.1.0',
+    version: installedVersion,
     url: '',
     force: false,
     description: '',
@@ -365,7 +366,7 @@ test('update check decodes UTF-8 characters split across stream chunks', async (
     chunks: [bytes.subarray(0, multibyteStart + 1), bytes.subarray(multibyteStart + 1)],
   });
 
-  const result = await checkForUpdates({ platform: 'darwin', arch: 'arm64', fetch: async () => response });
+  const result = await checkForUpdates({ platform: 'darwin', arch: 'arm64', currentVersion: '0.1.0', fetch: async () => response });
   assert.equal(result.description, description);
   assert.equal(response.state.textCalls, 0);
 });

@@ -81,7 +81,8 @@ test('workbench package exposes the planned public metadata', async () => {
   const manifest = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
 
   assert.equal(manifest.name, '@ineed-mqtt-tool/workbench');
-  assert.equal(manifest.version, '0.1.0');
+  const rootManifest = JSON.parse(await readFile(new URL('../../../package.json', import.meta.url), 'utf8'));
+  assert.equal(manifest.version, rootManifest.version);
   assert.equal(manifest.private, true);
   assert.equal(manifest.type, 'module');
   assert.deepEqual(manifest.files, ['src/']);

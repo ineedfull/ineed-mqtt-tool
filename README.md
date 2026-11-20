@@ -4,7 +4,7 @@
 
 面向物联网研发、设备联调与运维的 MQTT 桌面工作台。把连接、主题订阅、消息收发和设备响应验证放在一起，方便从“一条消息”追到“一次完整交互”。
 
-[产品官网](https://mqtt.ineedfull.com/) · [下载安装](https://mqtt.ineedfull.com/downloads/) · [设备消息场景](docs/message-scenarios.md) · [开发指南](docs/development.md)
+[产品官网](https://mqtt.ineedfull.com/) · [下载安装](https://mqtt.ineedfull.com/downloads/) · [设备消息场景](docs/message-scenarios.md) · [开发指南](docs/development.md) · [快速上手](docs/quick-start.md)
 
 [![MQTT 工作台：多连接、独立订阅与 JSON 消息收发](docs/images/readme/workbench.webp)](docs/images/readme/workbench.webp)
 
@@ -47,6 +47,10 @@
 [![设备消息场景：请求、响应、变量与断言](docs/images/readme/message-scenarios.webp)](docs/images/readme/message-scenarios.webp)
 
 ## 开始使用
+
+本轮测试版：`0.1.1`，调整范围见[版本说明](docs/releases/2026-11-20.md)。已可下载的文件及构建标识以官网下载页为准。
+
+第一次使用？先按[快速上手](docs/quick-start.md)完成一个小练习，里面列出了示例参数、成功判断和常见问题排查。
 
 1. 从官网选择适合系统与架构的安装包。
 2. 新建 Broker 连接，填写地址、端口与认证信息。
